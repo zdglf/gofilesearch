@@ -26,7 +26,7 @@ type GFile interface {
 // 是否文件大小超过限制
 func isOverSizeLimit(sizeLimit int, itemChild GFile) bool {
 
-	if sizeLimit >= 0 {
+	if sizeLimit > 0 {
 		if size, err := itemChild.GetFileSize(); err != nil {
 			//获取文件大小异常跳过
 			fmt.Println(err.Error())
@@ -46,6 +46,7 @@ func isMatchString(re string, itemChild GFile) bool {
 		var fileName string
 		var err error
 		if fileName,  err = itemChild.GetFileName();err!=nil{
+			fmt.Println(err.Error())
 			return false
 		}
 		if isOk, err := regexp.MatchString(re, fileName); err != nil {
@@ -66,19 +67,18 @@ func isMatchString(re string, itemChild GFile) bool {
 func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess func(f GFile) error) {
 	dirList := make([]GFile, 0, 100)
 	if isDir, err := file.IsDir(); err != nil {
+		fmt.Println(err.Error())
+	} else {
+
 		if isDir {
 			dirList = append(dirList, file)
 		}
-	} else {
-		fmt.Println(err.Error())
 	}
 	if chanSize <= 0 {
 		chanSize = 1
 	}
 	chanList := make(chan int, chanSize)
 	buffList := make(chan int, chanSize)
-	defer close(chanList)
-	defer close(buffList)
 
 	for len(dirList) != 0 {
 		item := dirList[0]
@@ -89,7 +89,6 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 			//遍历子目录的元素
 			for _, itemChild := range itemList {
 
-				fmt.Println(itemChild.GetFileName())
 
 				if isDir, err := itemChild.IsDir(); err != nil {
 					fmt.Println(err.Error())
@@ -121,7 +120,8 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 									if err := fp(f); err != nil {
 										fmt.Println(err.Error())
 									}
-									<-c
+
+									c <- 0
 								}(chanList, itemChild, fileProcess)
 								break wait_loop
 							}

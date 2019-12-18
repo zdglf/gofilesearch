@@ -3,7 +3,6 @@ package file_sys
 import (
 	"crypto"
 	"encoding/hex"
-	"fmt"
 	"io/ioutil"
     "path"
 	"os"
@@ -77,7 +76,6 @@ func (lf *LocalFile) IsDir() (isDir bool, err error) {
 	var f *os.File
 	var fileInfo os.FileInfo
 	isDir = false
-    fmt.Println(lf.filePath)
 	if f, err = os.Open(lf.filePath); err != nil {
 		return
 	}
