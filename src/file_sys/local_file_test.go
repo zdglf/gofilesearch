@@ -40,3 +40,14 @@ func TestWalkGFile(t *testing.T) {
 	}
 	WalkGFile(localFile, 10, "(.*)", 0, fileProcess)
 }
+
+func BenchmarkWalkGFile(b *testing.B) {
+	for i:=0;i<b.N;i++{
+		dir, _ := os.Getwd()
+		localFile := &LocalFile{dir}
+		fileProcess := func(f GFile)error{
+			return nil
+		}
+		WalkGFile(localFile, 10, "(.*)", 0, fileProcess)
+	}
+}

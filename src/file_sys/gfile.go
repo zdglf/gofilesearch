@@ -80,6 +80,9 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 	chanList := make(chan int, chanSize)
 	buffList := make(chan int, chanSize)
 
+	defer close(chanList)
+	defer close(buffList)
+
 	for len(dirList) != 0 {
 		item := dirList[0]
 		dirList = dirList[1:]
@@ -133,7 +136,8 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 		}
 	}
 	//等待处理完剩余协程
-	for i := 0; i < len(buffList); i++ {
+	bufSize := len(buffList)
+	for i := 0; i < bufSize; i++ {
 		<-buffList
 		<-chanList
 	}
