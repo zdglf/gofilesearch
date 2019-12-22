@@ -2,7 +2,6 @@ package file_sys
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/ledongthuc/pdf"
 	"log"
 	"regexp"
@@ -42,7 +41,7 @@ func isOverSizeLimit(sizeLimit int, itemChild GFile) bool {
 	if sizeLimit > 0 {
 		if size, err := itemChild.GetFileSize(); err != nil {
 			//获取文件大小异常跳过
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 			return true
 		} else {
 			//大于限制就跳过文件
@@ -59,12 +58,12 @@ func isMatchString(re string, itemChild GFile) bool {
 		var fileName string
 		var err error
 		if fileName, err = itemChild.GetFileName(); err != nil {
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 			return false
 		}
 		if isOk, err := regexp.MatchString(re, fileName); err != nil {
 			//正则异常跳过
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 			return false
 		} else {
 			//正则匹配失败跳过
@@ -80,7 +79,7 @@ func isMatchString(re string, itemChild GFile) bool {
 func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess func(f GFile) error) {
 	dirList := make([]GFile, 0, 100)
 	if isDir, err := file.IsDir(); err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	} else {
 
 		if isDir {
@@ -100,13 +99,13 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 		item := dirList[0]
 		dirList = dirList[1:]
 		if itemList, err := item.ListFile(); err != nil {
-			fmt.Println(err.Error())
+			log.Println(err.Error())
 		} else {
 			//遍历子目录的元素
 			for _, itemChild := range itemList {
 
 				if isDir, err := itemChild.IsDir(); err != nil {
-					fmt.Println(err.Error())
+					log.Println(err.Error())
 				} else {
 
 					if isDir {
@@ -133,7 +132,7 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 								buffList <- 0
 								go func(c chan int, f GFile, fp func(f GFile) error) {
 									if err := fp(f); err != nil {
-										fmt.Println(err.Error())
+										log.Println(err.Error())
 									}
 
 									c <- 0

@@ -42,8 +42,8 @@ func TestLocalFile_WalkGFile(t *testing.T) {
 		if hashValue, content, err := f.GetFileContent();err!=nil{
 			t.Error(err.Error())
 		}else{
-			log.Println(hashValue)
-			log.Println(content)
+			println(hashValue)
+			println(content)
 		}
 		return nil
 	}
