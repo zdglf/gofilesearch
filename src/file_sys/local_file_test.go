@@ -4,6 +4,8 @@ import (
 	"os"
 	"testing"
 	"fmt"
+	"path"
+	"log"
 )
 
 func TestLocalFile_ListFile(t *testing.T) {
@@ -31,17 +33,24 @@ func TestLocalFile_IsDir(t *testing.T) {
 	}
 }
 
-func TestWalkGFile(t *testing.T) {
+func TestLocalFile_WalkGFile(t *testing.T) {
 	dir, _ := os.Getwd()
+	dir = path.Join(dir, "data")
 	localFile := &LocalFile{dir}
 	fileProcess := func(f GFile)error{
 		fmt.Println(f.GetAbFilePath())
+		if hashValue, content, err := f.GetFileContent();err!=nil{
+			t.Error(err.Error())
+		}else{
+			log.Println(hashValue)
+			log.Println(content)
+		}
 		return nil
 	}
 	WalkGFile(localFile, 10, "(.*)", 0, fileProcess)
 }
 
-func BenchmarkWalkGFile(b *testing.B) {
+func BenchmarkLocalFile_WalkGFile(b *testing.B) {
 	for i:=0;i<b.N;i++{
 		dir, _ := os.Getwd()
 		localFile := &LocalFile{dir}

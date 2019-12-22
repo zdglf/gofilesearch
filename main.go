@@ -1,7 +1,6 @@
 package main
 import (
     "github.com/gin-gonic/gin"
-    "github.com/go-yaml/yaml"
 )
 
 
@@ -22,14 +21,14 @@ func main() {
     r.Static(ASSETS_PATH, ASSETS_DIR)
     search_engine_api := r.Group(SEARCH_ENGINE_API_PATH)
     {
-        search_engine_api.POST()
+        //search_engine_api.POST()
     }
 
     admin_api := r.Group(ADMIN_PATH,gin.BasicAuth(gin.Accounts{
 
     }))
     {
-        admin_api.POST()
+        //admin_api.POST()
     }
     r.Run()
 }

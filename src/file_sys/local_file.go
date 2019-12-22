@@ -65,8 +65,9 @@ func (lf *LocalFile) GetFileContent() (hashValue string, content string, err err
 		return
 	}
 	var hash = crypto.MD5.New()
-	hashValue = hex.EncodeToString(hash.Sum(data))
-	content = ParseFileContent(data)
+	hash.Write(data)
+	hashValue = hex.EncodeToString(hash.Sum(nil))
+	content = parseFileContent(data, lf.GetAbFilePath())
 	return
 
 }

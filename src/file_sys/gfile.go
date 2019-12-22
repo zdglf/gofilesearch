@@ -1,8 +1,21 @@
 package file_sys
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/ledongthuc/pdf"
+	"log"
 	"regexp"
+	"strings"
+	"path"
+)
+
+const (
+	typePdfFile      = ".pdf"
+	typeDocFile      = ".doc"
+	typeDocxFile     = ".docx"
+	typeTextFile     = ".txt"
+	typeMarkDownFile = ".md"
 )
 
 // General File 通用文件接口
@@ -45,7 +58,7 @@ func isMatchString(re string, itemChild GFile) bool {
 	if re != "" {
 		var fileName string
 		var err error
-		if fileName,  err = itemChild.GetFileName();err!=nil{
+		if fileName, err = itemChild.GetFileName(); err != nil {
 			fmt.Println(err.Error())
 			return false
 		}
@@ -92,7 +105,6 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 			//遍历子目录的元素
 			for _, itemChild := range itemList {
 
-
 				if isDir, err := itemChild.IsDir(); err != nil {
 					fmt.Println(err.Error())
 				} else {
@@ -110,7 +122,7 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 							continue
 						}
 
-						wait_loop:
+					wait_loop:
 						for {
 							//文件处理协程大于或等于，等待输出
 							if len(buffList) >= cap(buffList) {
@@ -145,6 +157,51 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 }
 
 // 解析文件内容
-func ParseFileContent(data []byte) string {
-	return string(data)
+func parseFileContent(data []byte, filePath string) (ret string) {
+
+	reader := bytes.NewReader(data)
+	dataSize := len(data)
+	fileSuffix := strings.ToLower(path.Ext(filePath))
+	switch fileSuffix {
+	case typePdfFile:
+		ret = parsePdfContent(reader, dataSize)
+	case typeTextFile,typeMarkDownFile:
+		ret = string(data)
+	case typeDocxFile:
+		ret = parseDocxContent(reader, dataSize)
+	}
+
+	return
+}
+
+func parseDocxContent(reader *bytes.Reader, dataSize int) (ret string) {
+	var err error
+	if ret, err = readDocxFile(reader, dataSize);err!=nil{
+		log.Println(err.Error())
+		return
+	}
+
+
+	return
+
+}
+
+func parsePdfContent(reader *bytes.Reader, dataSize int) (ret string) {
+	var r *pdf.Reader
+	var err error
+	if r, err = pdf.NewReader(reader, int64(dataSize)); err != nil {
+		log.Println(err.Error())
+		return
+	}
+	var buf bytes.Buffer
+	if b, err := r.GetPlainText(); err != nil {
+		log.Println(err.Error())
+		return
+	} else {
+		buf.ReadFrom(b)
+		ret = buf.String()
+		return
+	}
+
+
 }
