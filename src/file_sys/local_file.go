@@ -1,6 +1,7 @@
 package file_sys
 
 import (
+	_ "crypto/sha256"
 	"crypto"
 	"encoding/hex"
 	"io/ioutil"
@@ -64,7 +65,7 @@ func (lf *LocalFile) GetFileContent() (hashValue string, content string, err err
 	if data, err = ioutil.ReadAll(f); err != nil {
 		return
 	}
-	var hash = crypto.MD5.New()
+	var hash = crypto.SHA256.New()
 	hash.Write(data)
 	hashValue = hex.EncodeToString(hash.Sum(nil))
 	content = parseFileContent(data, lf.GetAbFilePath())
