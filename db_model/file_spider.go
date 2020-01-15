@@ -1,6 +1,6 @@
 package db_model
 
-import "github.com/zdglf/gofilesearch/src/base_struct"
+import "github.com/zdglf/gofilesearch/base_struct"
 
 type FileSpider struct {
 	Id              string               `xorm:"varchar(32) pk"`         //UUID

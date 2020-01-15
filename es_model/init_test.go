@@ -3,7 +3,7 @@ package es_model
 import "testing"
 import "time"
 
-import "github.com/zdglf/gofilesearch/src/base_struct"
+import "github.com/zdglf/gofilesearch/base_struct"
 
 func TestInitEsClient(t *testing.T) {
 	if _, err := InitEsClient(); err != nil {

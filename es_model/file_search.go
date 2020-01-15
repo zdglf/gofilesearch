@@ -1,7 +1,7 @@
 package es_model
 
 import (
-	"github.com/zdglf/gofilesearch/src/base_struct"
+	"github.com/zdglf/gofilesearch/base_struct"
 )
 
 type FileSearch struct {
