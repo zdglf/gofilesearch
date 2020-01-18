@@ -13,6 +13,6 @@ type FileSpider struct {
 	Regular         string               `xorm:"text not null"`          //文件名匹配正则表达式 不能为空
 	Timing          int                  `xorm:"int"`                    // <=0 不执行
 	LastRunningTime base_struct.JsonTime `xorm:"datetime"`               //上次执行时间 执行后需要更新日期
-	sizeLimit       int                  `xorm:"int"`                    //<=0 表示不限制
-	processSize     int                  `xorm:"int"`                    //<=0 表示使用1个协程处理
+	SizeLimit       int                  `xorm:"int"`                    //<=0 表示不限制
+	ProcessSize     int                  `xorm:"int"`                    //<=0 表示使用1个协程处理
 }

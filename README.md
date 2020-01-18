@@ -37,3 +37,35 @@
 |last_running_time|date    | 上次执行时间|
 |size_limit|int    | 文件大小限制 |
 |process_size|int|同时处理的协程|
+
+#### 接口
+##### 搜索接口
+
+    method:Post 
+
+    format:Json
+
+    param: 
+    {
+      key: 'keyword',
+      pageIndex: '0'
+    }
+
+    response:
+    {
+      code:'',
+      msg:'',
+      page: {
+        index:0,
+        total:10
+      }
+      data:[
+        {
+          'id':'',
+          'name': '',
+          'createAt': '',
+          'desc': ‘’,
+          'url': '',
+        }
+      ]
+    }

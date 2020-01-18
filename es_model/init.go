@@ -30,55 +30,7 @@ func InitEsClient() (client *elasticsearch7.Client, err error) {
 	return
 }
 
-func InsertDocument(fileModel FileSearch) (err error) {
-	var client *elasticsearch7.Client
-	if client, err = InitEsClient(); err != nil {
-		return
-	}
-	var jsonData []byte
-	if jsonData, err = json.Marshal(fileModel); err != nil {
-		return
-	}
-	req := esapi.IndexRequest{
-		Index:        esIndex,
-		DocumentType: esType,
-		DocumentID:   fileModel.Id,
-		Body:         bytes.NewReader(jsonData),
-		Refresh:      "true",
-	}
-	var res *esapi.Response
-	if res, err = req.Do(context.Background(), client); err != nil {
-		return
-	}
-	if res.IsError() {
-		err = errors.New(res.String())
-		return
-	}
-	log.Println(res.String())
-	return
 
-}
-
-func SearchDocument(keyword string) (result string, err error) {
-	var client *elasticsearch7.Client
-	if client, err = InitEsClient(); err != nil {
-		return
-	}
-	req := esapi.SearchRequest{
-		Index:        []string{esIndex},
-		DocumentType: []string{esType},
-	}
-	var res *esapi.Response
-	if res, err = req.Do(context.Background(), client); err != nil {
-		return
-	}
-	if res.IsError() {
-		err = errors.New(res.String())
-		return
-	}
-	log.Println(res.String())
-	return
-}
 
 func ConfigEsSetting() (err error) {
 	var client *elasticsearch7.Client
