@@ -2,11 +2,12 @@ package file_sys
 
 import (
 	"bytes"
-	"github.com/ledongthuc/pdf"
 	"log"
+	"path"
 	"regexp"
 	"strings"
-	"path"
+
+	"github.com/ledongthuc/pdf"
 )
 
 const (
@@ -61,6 +62,7 @@ func isMatchString(re string, itemChild GFile) bool {
 			log.Println(err.Error())
 			return false
 		}
+		log.Println(re, fileName)
 		if isOk, err := regexp.MatchString(re, fileName); err != nil {
 			//正则异常跳过
 			log.Println(err.Error())
@@ -112,12 +114,12 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 						//是目录，添加到待处理列表中
 						dirList = append(dirList, itemChild)
 					} else {
-						//判断文件是否超过大小
-						if isOverSizeLimit(sizeLimit, itemChild) {
-							continue
-						}
 						//判断文件是否匹配正则表达式
 						if !isMatchString(re, itemChild) {
+							continue
+						}
+						//判断文件是否超过大小
+						if isOverSizeLimit(sizeLimit, itemChild) {
 							continue
 						}
 
@@ -164,7 +166,7 @@ func parseFileContent(data []byte, filePath string) (ret string) {
 	switch fileSuffix {
 	case typePdfFile:
 		ret = parsePdfContent(reader, dataSize)
-	case typeTextFile,typeMarkDownFile:
+	case typeTextFile, typeMarkDownFile:
 		ret = string(data)
 	case typeDocxFile:
 		ret = parseDocxContent(reader, dataSize)
@@ -175,11 +177,10 @@ func parseFileContent(data []byte, filePath string) (ret string) {
 
 func parseDocxContent(reader *bytes.Reader, dataSize int) (ret string) {
 	var err error
-	if ret, err = readDocxFile(reader, dataSize);err!=nil{
+	if ret, err = readDocxFile(reader, dataSize); err != nil {
 		log.Println(err.Error())
 		return
 	}
-
 
 	return
 
@@ -201,6 +202,5 @@ func parsePdfContent(reader *bytes.Reader, dataSize int) (ret string) {
 		ret = buf.String()
 		return
 	}
-
 
 }

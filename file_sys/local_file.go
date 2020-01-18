@@ -1,10 +1,10 @@
 package file_sys
 
 import (
+	"github.com/zdglf/gofilesearch/util/hash"
 	"io/ioutil"
 	"os"
 	"path"
-	"github.com/zdglf/gofilesearch/util/hash"
 )
 
 var _ GFile = (*LocalFile)(nil)
@@ -41,7 +41,7 @@ func (lf *LocalFile) GetFileName() (fileName string, err error) {
 		return
 	}
 	defer f.Close()
-	if fileInfo, err = f.Stat(); err == nil {
+	if fileInfo, err = f.Stat(); err != nil {
 		return
 	} else {
 		fileName = fileInfo.Name()

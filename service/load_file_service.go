@@ -1,14 +1,13 @@
 package service
 
 import (
-	"strings"
-	"time"
-
 	"github.com/zdglf/gofilesearch/base_struct"
 	"github.com/zdglf/gofilesearch/db_model"
 	"github.com/zdglf/gofilesearch/es_model"
 	"github.com/zdglf/gofilesearch/file_sys"
 	"github.com/zdglf/gofilesearch/util/flog"
+	"strings"
+	"time"
 )
 
 const (
@@ -57,7 +56,7 @@ func (this *LoadFileService) AsyncLoadFile(fileModel *db_model.FileSpider) {
 			return
 		}
 		if !verify {
-			flog.Println("verify user password error")
+			flog.Println("wrong user password")
 			return
 		}
 
@@ -68,7 +67,8 @@ func (this *LoadFileService) AsyncLoadFile(fileModel *db_model.FileSpider) {
 			fileModel.SizeLimit,
 			insertToESFromGfile)
 		flog.Println("end search ", gfile.GetAbFilePath())
+	} else {
+		flog.Println("no such file type, nothing start")
 	}
-	flog.Println("no such file type, nothing start")
 
 }

@@ -9,7 +9,7 @@ import (
 	elasticsearch7 "github.com/elastic/go-elasticsearch/v7"
 	"github.com/elastic/go-elasticsearch/v7/esapi"
 	"github.com/zdglf/gofilesearch/base_struct"
-	"github.com/zdglf/gofilesearch/util/flogtil/flog"
+	"github.com/zdglf/gofilesearch/util/flog"
 )
 
 type FileSearch struct {
