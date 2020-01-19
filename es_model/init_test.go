@@ -24,3 +24,12 @@ func TestInsertDocument(t *testing.T) {
 		t.Error(err.Error())
 	}
 }
+
+func TestSearchDocument(t *testing.T) {
+
+	if result, err := SearchDocument("百度", 0); err != nil {
+		t.Error(err.Error())
+	} else {
+		println(result)
+	}
+}

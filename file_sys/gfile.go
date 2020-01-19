@@ -62,7 +62,6 @@ func isMatchString(re string, itemChild GFile) bool {
 			log.Println(err.Error())
 			return false
 		}
-		log.Println(re, fileName)
 		if isOk, err := regexp.MatchString(re, fileName); err != nil {
 			//正则异常跳过
 			log.Println(err.Error())

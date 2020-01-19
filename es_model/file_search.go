@@ -50,14 +50,21 @@ func InsertDocument(fileModel FileSearch) (err error) {
 
 }
 
-func SearchDocument(keyword string) (result string, err error) {
+func SearchDocument(keyword string, pageIndex int) (result string, err error) {
 	var client *elasticsearch7.Client
 	if client, err = InitEsClient(); err != nil {
 		return
 	}
+	pageSize := esPageCount
+	pageFrom := esPageCount * pageIndex
+
 	req := esapi.SearchRequest{
 		Index:        []string{esIndex},
 		DocumentType: []string{esType},
+		Query:        keyword,
+		From:         &pageFrom,
+		Size:         &pageSize,
+		Pretty:       true,
 	}
 	var res *esapi.Response
 	if res, err = req.Do(context.Background(), client); err != nil {
@@ -67,6 +74,7 @@ func SearchDocument(keyword string) (result string, err error) {
 		err = errors.New(res.String())
 		return
 	}
+	result = res.String()
 	flog.Println(res.String())
 	return
 }

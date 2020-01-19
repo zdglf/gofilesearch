@@ -1,20 +1,21 @@
 package es_model
 
 import (
-	"bytes"
-	"context"
-	"encoding/json"
-	"errors"
-	elasticsearch7 "github.com/elastic/go-elasticsearch/v7"
-	"github.com/elastic/go-elasticsearch/v7/esapi"
 	"log"
+
+	elasticsearch7 "github.com/elastic/go-elasticsearch/v7"
 )
 
 const (
 	// es 的数据库
 	esIndex = "file_search"
 	// es 的表
-	esType = "doc"
+	esType = "_doc"
+	//默认页数
+	esPageCount = 50
+
+	esQueryKwContent = "content"
+	esQueryKwUrl     = "url"
 )
 
 func init() {
@@ -28,48 +29,4 @@ func InitEsClient() (client *elasticsearch7.Client, err error) {
 		return
 	}
 	return
-}
-
-func ConfigEsSetting() (err error) {
-	var client *elasticsearch7.Client
-	if client, err = InitEsClient(); err != nil {
-		return
-	}
-	config := esConfig{
-		esConfigProperties{
-			esConfigInfo{
-				Type:     "text",
-				Analyzer: "ik_max_word",
-			},
-			esConfigInfo{
-				Type:     "text",
-				Analyzer: "ik_max_word",
-			},
-			esConfigInfo{
-				Type:     "text",
-				Analyzer: "ik_max_word",
-			},
-		},
-	}
-	var jsonData []byte
-	if jsonData, err = json.Marshal(config); err != nil {
-		return
-	}
-	log.Println(string(jsonData))
-	req := esapi.IndicesPutMappingRequest{
-		Index:        []string{esIndex},
-		DocumentType: esType,
-		Body:         bytes.NewBuffer(jsonData),
-	}
-	var res *esapi.Response
-	if res, err = req.Do(context.Background(), client); err != nil {
-		return
-	}
-	if res.IsError() {
-		err = errors.New(res.String())
-		return
-	}
-	log.Println(res.String())
-	return
-
 }

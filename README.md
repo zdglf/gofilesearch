@@ -55,12 +55,19 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
 
 
 #### 接口
+
+##### 创建文件爬虫任务
+    method:Post
+    format:Json
+    param:
+    {
+
+    }
+
 ##### 搜索接口
 
     method:Post 
-
     format:Json
-
     param: 
     {
       key: 'keyword',
@@ -85,3 +92,12 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
         }
       ]
     }
+
+### TODO
+1. 文件GBK 转 UTF8
+2. 多关键字查询
+3. 定义实现接口
+4. 实现前段查询
+5. 实现后台控制管理
+6. 实现后台管理登录
+7. 实现后台用户管理
