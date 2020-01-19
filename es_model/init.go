@@ -30,8 +30,6 @@ func InitEsClient() (client *elasticsearch7.Client, err error) {
 	return
 }
 
-
-
 func ConfigEsSetting() (err error) {
 	var client *elasticsearch7.Client
 	if client, err = InitEsClient(); err != nil {
@@ -39,15 +37,17 @@ func ConfigEsSetting() (err error) {
 	}
 	config := esConfig{
 		esConfigProperties{
-			esConfigContent{
-				Type:           "text",
-				Analyzer:       "ik_max_word",
-				SearchAnalyzer: "ik_smart",
+			esConfigInfo{
+				Type:     "text",
+				Analyzer: "ik_max_word",
 			},
-			esConfigFileName{
-				Type:           "text",
-				Analyzer:       "ik_max_word",
-				SearchAnalyzer: "ik_smart",
+			esConfigInfo{
+				Type:     "text",
+				Analyzer: "ik_max_word",
+			},
+			esConfigInfo{
+				Type:     "text",
+				Analyzer: "ik_max_word",
 			},
 		},
 	}

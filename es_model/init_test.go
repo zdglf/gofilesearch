@@ -24,9 +24,3 @@ func TestInsertDocument(t *testing.T) {
 		t.Error(err.Error())
 	}
 }
-
-func TestConfigEsSetting(t *testing.T) {
-	if err := ConfigEsSetting(); err != nil {
-		t.Error(err.Error())
-	}
-}

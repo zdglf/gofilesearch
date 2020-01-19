@@ -38,6 +38,22 @@
 |size_limit|int    | 文件大小限制 |
 |process_size|int|同时处理的协程|
 
+#### mysql 启动
+
+> sudo docker run --name mysql -p 3306:3306 -v /Users/zhangmike/Documents/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
+
+#### es7.x 启动
+
+> sudo docker run -p 9200:9200 -p 9300:9300 -v /Users/zhangmike/Documents/data/es:/usr/share/elasticsearch/data -e "discovery.type=single-node" -d elasticsearch-ik-pinyin:7.4.2
+
+##### 初始化es7.x mapping
+
+```
+curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X PUT --data '{"settings":{"index.analysis.analyzer.default.type":"ik_max_word"},"mappings":{"properties":{"url":{"type":"text","analyzer":"ik_max_word"},"content":{"type":"text","analyzer":"ik_max_word"},"file_name":{"type":"text","analyzer":"ik_max_word"}}}}' 
+```
+
+
+
 #### 接口
 ##### 搜索接口
 
