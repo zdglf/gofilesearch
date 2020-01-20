@@ -166,7 +166,7 @@ func parseFileContent(data []byte, filePath string) (ret string) {
 	case typePdfFile:
 		ret = parsePdfContent(reader, dataSize)
 	case typeTextFile, typeMarkDownFile:
-		ret = textdecoder.GetString(data)
+		ret, _ = textdecoder.GetString(data)
 	case typeDocxFile:
 		ret = parseDocxContent(reader, dataSize)
 	}
