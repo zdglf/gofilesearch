@@ -64,6 +64,17 @@ func TestGetString(t *testing.T) {
 		t.Error(ret, "不等于 '测试UTF16BE'")
 	}
 
+	if data, err = readAllFile("data/test_asiic.txt"); err != nil {
+		t.Error(err.Error())
+	}
+	if ret, err = GetString(data); err != nil {
+		t.Error(err.Error())
+	}
+
+	if ret != "A" {
+		t.Error(ret, "不等于 'A'")
+	}
+
 }
 
 func readAllFile(fileName string) (data []byte, err error) {

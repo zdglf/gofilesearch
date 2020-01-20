@@ -3,8 +3,9 @@ package textdecoder
 import (
 	"bytes"
 	"io/ioutil"
+	"log"
 
-	"github.com/saintfish/chardet"
+	"github.com/gogs/chardet"
 	"golang.org/x/text/encoding"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/encoding/unicode"
@@ -59,9 +60,10 @@ func getTextDecoder(header []byte) (decoder *encoding.Decoder) {
 			decoder = unicode.UTF8.NewDecoder()
 			return
 		}
+		log.Println(r.Charset)
 		if r.Charset == "UTF-8" {
 			decoder = unicode.UTF8.NewDecoder()
-		} else if r.Charset == "GB-18030" {
+		} else if r.Charset == "GB18030" {
 			decoder = simplifiedchinese.GBK.NewDecoder()
 		} else {
 			decoder = unicode.UTF8.NewDecoder()
