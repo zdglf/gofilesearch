@@ -2,12 +2,12 @@ package file_sys
 
 import (
 	"bytes"
+	"github.com/ledongthuc/pdf"
+	"github.com/zdglf/gofilesearch/util/textdecoder"
 	"log"
 	"path"
 	"regexp"
 	"strings"
-
-	"github.com/ledongthuc/pdf"
 )
 
 const (
@@ -166,7 +166,7 @@ func parseFileContent(data []byte, filePath string) (ret string) {
 	case typePdfFile:
 		ret = parsePdfContent(reader, dataSize)
 	case typeTextFile, typeMarkDownFile:
-		ret = string(data)
+		ret = textdecoder.GetString(data)
 	case typeDocxFile:
 		ret = parseDocxContent(reader, dataSize)
 	}

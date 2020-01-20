@@ -101,3 +101,5 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
 5. 实现后台控制管理
 6. 实现后台管理登录
 7. 实现后台用户管理
+8. 支持pptx,ppt,XLS，doc
+9. 支持SVN,FTP,WINODWS共享文件
