@@ -94,8 +94,6 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
     }
 
 ### TODO
-1. 文件GBK 转 UTF8
-2. 多关键字查询
 3. 定义实现接口
 4. 实现前段查询
 5. 实现后台控制管理
@@ -103,3 +101,4 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
 7. 实现后台用户管理
 8. 支持pptx,ppt,XLS，doc
 9. 支持SVN,FTP,WINODWS共享文件
+10. 过滤HTML标签，关键字高亮

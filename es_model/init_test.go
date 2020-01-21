@@ -5,6 +5,8 @@ import "time"
 
 import "github.com/zdglf/gofilesearch/base_struct"
 
+import "encoding/json"
+
 func TestInitEsClient(t *testing.T) {
 	if _, err := InitEsClient(); err != nil {
 		t.Error(err.Error())
@@ -27,9 +29,14 @@ func TestInsertDocument(t *testing.T) {
 
 func TestSearchDocument(t *testing.T) {
 
-	if result, err := SearchDocument("百度", 0); err != nil {
+	if result, err := SearchDocument("README.md", 0); err != nil {
 		t.Error(err.Error())
 	} else {
-		println(result)
+		if data, err := json.Marshal(result); err != nil {
+			t.Error(err.Error())
+		} else {
+			println(string(data))
+		}
+
 	}
 }
