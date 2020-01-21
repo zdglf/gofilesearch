@@ -16,8 +16,19 @@ func TestGetString(t *testing.T) {
 	if ret, err = GetString(data); err != nil {
 		t.Error(err.Error())
 	}
-	if ret != "测试GBK" {
-		t.Error(ret, "不等于 '测试GBK'")
+	if ret != "AB测试GBK" {
+		t.Error(ret, "不等于 'AB测试GBK'")
+	}
+
+	if data, err = readAllFile("data/test_gbk_one.txt"); err != nil {
+		t.Error(err.Error())
+	}
+
+	if ret, err = GetString(data); err != nil {
+		t.Error(err.Error())
+	}
+	if ret != "AB测试" {
+		t.Error(ret, "不等于 'AB测试'")
 	}
 
 	if data, err = readAllFile("data/test_utf8.txt"); err != nil {

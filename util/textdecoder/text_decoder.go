@@ -24,7 +24,7 @@ func getText(data []byte, decoder *encoding.Decoder) (ret string, err error) {
 }
 
 func GetString(data []byte) (ret string, err error) {
-	decoder := getTextDecoder(data[0:3])
+	decoder := getTextDecoder(data)
 	//UTF8 有Bom 格式返回decoder = nil
 	if decoder == nil {
 		ret = string(data[3:])
@@ -36,20 +36,20 @@ func GetString(data []byte) (ret string, err error) {
 
 func getTextDecoder(header []byte) (decoder *encoding.Decoder) {
 
-	if len(header) < 3 {
-
+	if len(header) < 2 {
+		log.Println("Using UTF8")
 		decoder = unicode.UTF8.NewDecoder()
 		return
 	}
 
-	if header[0] == byte(0xEF) && header[1] == byte(0xBB) && header[2] == byte(0xBF) {
-
+	if len(header) >= 3 && header[0] == byte(0xEF) && header[1] == byte(0xBB) && header[2] == byte(0xBF) {
+		log.Println("Using UTF8 With BOM")
 		decoder = nil
 	} else if header[0] == byte(0xFE) && header[1] == byte(0xFF) {
-
+		log.Println("Using UTF16BE With BOM")
 		decoder = unicode.UTF16(unicode.BigEndian, unicode.UseBOM).NewDecoder()
 	} else if header[0] == byte(0xFF) && header[1] == byte(0xFE) {
-
+		log.Println("Using UTF16LE With BOM")
 		decoder = unicode.UTF16(unicode.LittleEndian, unicode.UseBOM).NewDecoder()
 	} else {
 
@@ -57,16 +57,17 @@ func getTextDecoder(header []byte) (decoder *encoding.Decoder) {
 		var err error
 		var r *chardet.Result
 		if r, err = detector.DetectBest(header); err != nil {
+			log.Println("Using UTF8")
 			decoder = unicode.UTF8.NewDecoder()
 			return
 		}
-		log.Println(r.Charset)
+		log.Println("Detect ", r.Charset)
 		if r.Charset == "UTF-8" {
+			log.Println("Using UTF8")
 			decoder = unicode.UTF8.NewDecoder()
-		} else if r.Charset == "GB18030" {
-			decoder = simplifiedchinese.GBK.NewDecoder()
 		} else {
-			decoder = unicode.UTF8.NewDecoder()
+			log.Println("Using GBK")
+			decoder = simplifiedchinese.GBK.NewDecoder()
 		}
 		return
 
