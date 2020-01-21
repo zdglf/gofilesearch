@@ -60,7 +60,7 @@ func InsertDocument(fileModel FileSearch) (err error) {
 
 }
 
-func SearchDocument(keyword string, pageIndex int) (result *api_model.SearchResultResponse, err error) {
+func SearchDocument(keyword string, pageIndex int) (searchResultArray []*api_model.SearchResult, pageInfo *api_model.Page, err error) {
 	var client *elasticsearch7.Client
 	if client, err = InitEsClient(); err != nil {
 		return
@@ -121,20 +121,19 @@ func SearchDocument(keyword string, pageIndex int) (result *api_model.SearchResu
 	if err = json.NewDecoder(res.Body).Decode(&r); err != nil {
 		return
 	}
-	result = &api_model.SearchResultResponse{}
 	if esHits, ok := r["hits"].(map[string]interface{}); ok {
 		//查找总数据
 		if searchTotal, foundTotal := esHits["total"].(map[string]interface{}); foundTotal {
-			var pageInfo = &api_model.Page{}
+			pageInfo = &api_model.Page{}
 			pageInfo.Total = int(searchTotal["value"].(float64))
 			pageInfo.Index = pageFrom
 			pageInfo.Count = esPageCount
-			result.Page = pageInfo
+
 		}
 
 		//查找搜索内容
 		if searchArray, foundArray := esHits["hits"].([]interface{}); foundArray {
-			var searchResultArray = make([]*api_model.SearchResult, 0)
+			searchResultArray = make([]*api_model.SearchResult, 0)
 			for _, value := range searchArray {
 				if item, foundItem := value.(map[string]interface{}); foundItem {
 
@@ -165,7 +164,6 @@ func SearchDocument(keyword string, pageIndex int) (result *api_model.SearchResu
 				}
 
 			}
-			result.Data = searchResultArray
 		}
 
 	}

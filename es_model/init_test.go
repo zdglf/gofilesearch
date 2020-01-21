@@ -29,10 +29,16 @@ func TestInsertDocument(t *testing.T) {
 
 func TestSearchDocument(t *testing.T) {
 
-	if result, err := SearchDocument("README.md", 0); err != nil {
+	if resultArray, pageInfo, err := SearchDocument("README.md", 0); err != nil {
 		t.Error(err.Error())
 	} else {
-		if data, err := json.Marshal(result); err != nil {
+		if data, err := json.Marshal(resultArray); err != nil {
+			t.Error(err.Error())
+		} else {
+			println(string(data))
+		}
+
+		if data, err := json.Marshal(pageInfo); err != nil {
 			t.Error(err.Error())
 		} else {
 			println(string(data))

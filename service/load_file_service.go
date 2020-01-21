@@ -31,6 +31,7 @@ func insertToESFromGfile(gfile file_sys.GFile) (err error) {
 	if fileName, err = gfile.GetFileName(); err != nil {
 		return
 	}
+	flog.Println("post file:", gfile.GetAbFilePath())
 	return es_model.InsertDocument(es_model.FileSearch{
 		Id:         hashId,
 		FileName:   fileName,
