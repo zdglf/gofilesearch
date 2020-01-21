@@ -11,5 +11,5 @@ type SearchResult struct {
 type SearchResultResponse struct {
 	*Page
 	*StatusCode
-	Data []SearchResult `json:"data"`
+	Data []*SearchResult `json:"data"`
 }

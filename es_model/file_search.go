@@ -134,11 +134,11 @@ func SearchDocument(keyword string, pageIndex int) (result *api_model.SearchResu
 
 		//查找搜索内容
 		if searchArray, foundArray := esHits["hits"].([]interface{}); foundArray {
-			var searchResultArray = make([]api_model.SearchResult, 0)
+			var searchResultArray = make([]*api_model.SearchResult, 0)
 			for _, value := range searchArray {
 				if item, foundItem := value.(map[string]interface{}); foundItem {
 
-					var searchResult = api_model.SearchResult{}
+					var searchResult = &api_model.SearchResult{}
 					if docInfo, foundDoc := item["_source"].(map[string]interface{}); foundDoc {
 
 						searchResult.Name = docInfo[esSearchFileName].(string)
