@@ -45,7 +45,7 @@ func InsertDocument(fileModel FileSearch) (err error) {
 		DocumentType: esType,
 		DocumentID:   fileModel.Id,
 		Body:         bytes.NewReader(jsonData),
-		Refresh:      "false",
+		Refresh:      "true",
 	}
 	var res *esapi.Response
 	if res, err = req.Do(context.Background(), client); err != nil {
@@ -111,6 +111,9 @@ func SearchDocument(keyword string, pageIndex int) (searchResultArray []*api_mod
 		client.Search.WithTrackTotalHits(true),
 		client.Search.WithPretty(),
 	)
+	if err != nil {
+		return
+	}
 
 	if res.IsError() {
 		err = errors.New(res.String())

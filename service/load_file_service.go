@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/zdglf/gofilesearch/base_struct"
 	"github.com/zdglf/gofilesearch/db_model"
 	"github.com/zdglf/gofilesearch/es_model"
@@ -17,6 +18,7 @@ const (
 )
 
 type LoadFileService struct {
+	*gin.Context
 }
 
 // 加载Gfile 并发送到ElasticsSearch
@@ -42,7 +44,7 @@ func insertToESFromGfile(gfile file_sys.GFile) (err error) {
 	})
 }
 
-func (this *LoadFileService) AsyncLoadFile(fileModel *db_model.FileSpider) {
+func (this *LoadFileService) LoadFile(fileModel *db_model.FileSpider) {
 	var gfile file_sys.GFile = nil
 	switch strings.ToLower(fileModel.Type) {
 	case typeFile:

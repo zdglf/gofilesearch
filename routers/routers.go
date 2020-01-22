@@ -1,18 +1,29 @@
 package routers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/zdglf/gofilesearch/routers/api"
 )
 
 const (
 	searchEngineApiPath = "/search"
-	searchDocPath       = "/doc"
-	tempaltePath        = "../templates/*"
-	assetsPath          = "/assets"
-	assetsDir           = "../assets"
+	searchApiDocPath    = "/doc"
 
-	adminPath = "/admin"
+	tempaltePath = "../templates/*"
+	assetsPath   = "/assets"
+	assetsDir    = "../assets"
+
+	adminApiPath = "/admin"
+
+	taskApiPath = "/task"
+
+	createApiPath = "/create"
+	execApiPath   = "/exec"
+	listApiPath   = "/list"
+	deleteApiPath = "/delete"
+	modifyApiPath = "/modify"
+	infoApiPath   = "/info"
 )
 
 func InitRouters() (routers *gin.Engine) {
@@ -20,19 +31,23 @@ func InitRouters() (routers *gin.Engine) {
 	routers.Use(gin.Logger())
 	routers.Use(gin.Recovery())
 
-	routers.LoadHTMLGlob(tempaltePath)
+	//routers.LoadHTMLGlob(tempaltePath)
 	routers.Static(assetsDir, assetsPath)
 
 	searchEngineApi := routers.Group(searchEngineApiPath)
 	{
-		searchEngineApi.POST(searchDocPath, api.SearchDoc)
+		searchEngineApi.POST(searchApiDocPath, api.SearchDoc)
 
 	}
 
-	// adminApi := routers.Group(adminPath, gin.BasicAuth(gin.Accounts{}))
-	// {
-	// 	adminApi.POST()
-	// }
+	adminTaskApi := routers.Group(fmt.Sprintf("%s%s", adminApiPath, taskApiPath))
+	{
+		adminTaskApi.POST(createApiPath, api.AdminTaskCreate)
+		adminTaskApi.POST(listApiPath, api.AdminTaskList)
+		adminTaskApi.POST(execApiPath, api.AdminTaskList)
+		adminTaskApi.POST(deleteApiPath, api.AdminTaskDelete)
+		adminTaskApi.POST(modifyApiPath, api.AdminTaskModify)
+	}
 	return
 
 }

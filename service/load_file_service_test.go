@@ -6,7 +6,7 @@ import (
 	"github.com/zdglf/gofilesearch/db_model"
 )
 
-func TestLoadFileService_AsyncLoadFile(t *testing.T) {
+func TestLoadFileService_LoadFile(t *testing.T) {
 	fls := &LoadFileService{}
 	fileSpider := &db_model.FileSpider{
 		Id:          "123",
@@ -16,6 +16,6 @@ func TestLoadFileService_AsyncLoadFile(t *testing.T) {
 		Regular:     "(pdf|txt|md|docx)$",
 		ProcessSize: 20,
 	}
-	fls.AsyncLoadFile(fileSpider)
+	fls.LoadFile(fileSpider)
 
 }
