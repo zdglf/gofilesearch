@@ -44,7 +44,7 @@ func InitRouters() (routers *gin.Engine) {
 	{
 		adminTaskApi.POST(createApiPath, api.AdminTaskCreate)
 		adminTaskApi.POST(listApiPath, api.AdminTaskList)
-		adminTaskApi.POST(execApiPath, api.AdminTaskList)
+		adminTaskApi.POST(execApiPath, api.AdminTaskExec)
 		adminTaskApi.POST(deleteApiPath, api.AdminTaskDelete)
 		adminTaskApi.POST(modifyApiPath, api.AdminTaskModify)
 	}

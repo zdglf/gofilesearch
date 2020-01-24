@@ -15,6 +15,8 @@ const (
 	envHost     = "MYSQL_HOST"     //Mysql 服务器地址
 	envPort     = "MYSQL_PORT"     //Mysql 端口号
 	envDbName   = "MYSQL_DBNAME"   //Mysql 数据库名
+
+	envDBPageCount = 50 //Mysql 默认分页
 )
 
 func init() {
@@ -29,7 +31,7 @@ func initEngine(needSync bool) (engine *xorm.Engine, err error) {
 	if engine, err = xorm.NewEngine(sqlDriver, os.ExpandEnv("$"+envUserName+":$"+envPassword+"@tcp($"+envHost+":$"+envPort+")/$"+envDbName+"?charset=utf8")); err != nil {
 		return
 	}
-	engine.ShowSQL(true)
+	engine.ShowSQL(false)
 	if needSync {
 		engine.Sync(new(FileSpider))
 	}

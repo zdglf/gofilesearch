@@ -8,6 +8,7 @@ require (
 	github.com/go-sql-driver/mysql v1.4.1
 	github.com/go-xorm/xorm v0.7.9
 	github.com/gogs/chardet v0.0.0-20191104214054-4b6791f73a28
+	github.com/google/uuid v1.1.1
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/ledongthuc/pdf v0.0.0-20190830105003-8ac343ec9fdd
 	golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2

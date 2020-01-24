@@ -18,7 +18,7 @@ const (
 )
 
 type LoadFileService struct {
-	*gin.Context
+	Context *gin.Context
 }
 
 // 加载Gfile 并发送到ElasticsSearch

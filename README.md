@@ -1,5 +1,7 @@
 ### 文件搜索
 
+#### 
+
 
 #### ES设计
  
@@ -11,10 +13,10 @@
 |:----:|:----:|:----:|
 |id        |text   | 文件sha256值 [记录唯一值] |
 |content   |text   | 文件内容 [加入中文搜索]    |
-|url       |text   | 文件URI                  |
-|click_count|int    | 搜索内容点击次数           | 
-|create_at  |date   | 记录创建时间              |
-|file_name  |text   | 文件名 [加入中文搜索]     |
+|url       |text   | 文件URI                 |
+|click_count|int    | 搜索内容点击次数         | 
+|create_at  |date   | 记录创建时间            |
+|file_name  |text   | 文件名                 |
 
 
 #### 数据库设计
@@ -42,6 +44,13 @@
 
 > sudo docker run --name mysql -p 3306:3306 -v /Users/zhangmike/Documents/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
 
+##### db_model 测试
+
+```
+//需要添加环境变量
+MYSQL_USER=root MYSQL_PASSWORD=123456 MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DBNAME=test go test -timeout 30s github.com/zdglf/gofilesearch/db_model -run ^TestInsertFileSpider$ -v
+```
+
 #### es7.x 启动
 
 > sudo docker run -p 9200:9200 -p 9300:9300 -v /Users/zhangmike/Documents/data/es:/usr/share/elasticsearch/data -e "discovery.type=single-node" -d elasticsearch-ik-pinyin:7.4.2
@@ -57,6 +66,7 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
 #### 接口
 
 ##### 创建文件爬虫任务
+    url:/admin/task/create
     method:Post
     format:Json
     param:
@@ -64,8 +74,45 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
 
     }
 
-##### 搜索接口
+##### 执行文件爬虫任务
+    url: /admin/task/exec
+    method:Post
+    format:Json
+    param:
+    {
 
+    }
+##### 查看文件爬虫任务列表
+    url: /admin/task/list
+    method:Post
+    format:Json
+    param:
+    {
+
+    }
+
+##### 删除文件爬虫任务
+
+    url: /admin/task/delete
+    method:Post
+    format:Json
+    param:
+    {
+
+    }
+
+##### 修改文件爬虫任务
+
+    url:/admin/task/modify
+    method:Post
+    format:Json
+    param:
+    {
+      
+    }
+
+##### 搜索接口
+    url:/search/doc
     method:Post 
     format:Json
     param: 
