@@ -23,6 +23,16 @@ func TestInsertDocument(t *testing.T) {
 	}
 }
 
+func TestIsExistDocument(t *testing.T) {
+	if exist, err := IsDocumentExist("12345678"); err != nil {
+		t.Error(err.Error())
+	} else {
+		if exist {
+			t.Error("error should not exist")
+		}
+	}
+}
+
 func TestSearchDocument(t *testing.T) {
 
 	if resultArray, pageInfo, err := SearchDocument("链接", 0); err != nil {

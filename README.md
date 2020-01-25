@@ -53,6 +53,16 @@ MYSQL_USER=root MYSQL_PASSWORD=123456 MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL
 
 #### es7.x 启动
 
+```
+docker pull docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -d docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+
+docker exec -it [容器Id] /bin/sh
+elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v7.4.2/elasticsearch-analysis-ik-7.4.2.zip 
+elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v7.4.2/elasticsearch-analysis-pinyin-7.4.2.zip  
+docker commit [容器Id] elasticsearch-ik-pinyin:7.4.2
+```
+
 > sudo docker run -p 9200:9200 -p 9300:9300 -v /Users/zhangmike/Documents/data/es:/usr/share/elasticsearch/data -e "discovery.type=single-node" -d elasticsearch-ik-pinyin:7.4.2
 
 ##### 初始化es7.x mapping

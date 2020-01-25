@@ -31,6 +31,32 @@ type FileSearch struct {
 	CreateAt   base_struct.JsonTime `json:"create_at"`
 }
 
+func IsDocumentExist(id string) (exist bool, err error) {
+	var client *elasticsearch7.Client
+	if client, err = InitEsClient(); err != nil {
+		return
+	}
+	req := esapi.ExistsRequest{
+		Index:        esIndex,
+		DocumentType: esType,
+		DocumentID:   id,
+	}
+	var res *esapi.Response
+	if res, err = req.Do(context.Background(), client); err != nil {
+		return
+	}
+	if res.StatusCode == 200 {
+		exist = true
+	} else if res.StatusCode == 404 {
+		exist = false
+	} else {
+		err = errors.New(res.String())
+		flog.Println(err.Error())
+	}
+	return
+
+}
+
 func InsertDocument(fileModel FileSearch) (err error) {
 	var client *elasticsearch7.Client
 	if client, err = InitEsClient(); err != nil {

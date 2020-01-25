@@ -27,12 +27,24 @@ func insertToESFromGfile(gfile file_sys.GFile) (err error) {
 	var hashId string
 	var content string
 	if hashId, content, err = gfile.GetFileContent(); err != nil {
+		flog.Println(err.Error())
 		return
 	}
 
 	if fileName, err = gfile.GetFileName(); err != nil {
+		flog.Println(err.Error())
 		return
 	}
+	var exist bool
+	if exist, err = es_model.IsDocumentExist(hashId); err != nil {
+		flog.Println(err.Error())
+		return
+	}
+	//文件存在
+	if exist {
+		return
+	}
+
 	flog.Println("post file:", gfile.GetAbFilePath())
 	return es_model.InsertDocument(es_model.FileSearch{
 		Id:         hashId,
@@ -43,6 +55,8 @@ func insertToESFromGfile(gfile file_sys.GFile) (err error) {
 		Url:        gfile.GetAbFilePath(),
 	})
 }
+
+func (this *LoadFileService) ResponseApiLoadFile()
 
 func (this *LoadFileService) LoadFile(fileModel *db_model.FileSpider) {
 	var gfile file_sys.GFile = nil
