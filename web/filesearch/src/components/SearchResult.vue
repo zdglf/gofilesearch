@@ -3,10 +3,10 @@
     <el-header>
       <el-row :gutter="20">
         <el-col :span="16">
-          <el-input v-model="input" placeholder="请输入搜索内容" clearable></el-input>
+          <el-input v-model="input" placeholder="请输入搜索内容" clearable @keyup.native.enter="clickFileSearch" ></el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click.native="clickFileSearch">搜索</el-button>
+          <el-button type="primary" @click="clickFileSearch">搜索</el-button>
         </el-col>
       </el-row>
     </el-header>
@@ -16,20 +16,15 @@
       </div>
       <div v-show="search_result.length > 0">
         <div  v-for="item in search_result" :key="item.id">
-          <el-row :gutter="20">
-            <el-col :span="10">
-              <el-button type="text">{{item.name}}</el-button>
-            </el-col>
-            <el-col :span="10">
-              <el-button type="text">{{item.desc}}</el-button>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="16">
-              <el-button type="text">{{item.url}}</el-button>
-            </el-col>
-          </el-row>
-          <el-divider></el-divider>
+          <el-card>
+            <div slot="header" class="clearfix">
+              <span>{{item.name}}</span>
+              <el-button style="float: right; padding: 3px 0" type="text">复制地址</el-button>
+            </div>
+            <div v-for="hit in item.desc" :key="hit">
+              {{hit}}
+            </div>
+          </el-card>
         </div>
       </div>
     </el-main>
@@ -120,3 +115,26 @@ export default {
   }
 }
 </script>
+
+<style>
+  .text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
+
+  .box-card {
+    width: 480px;
+  }
+</style>
