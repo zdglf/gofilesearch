@@ -11,6 +11,8 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/ledongthuc/pdf v0.0.0-20190830105003-8ac343ec9fdd
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.1 // indirect
 	golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2
 	gopkg.in/yaml.v2 v2.2.7 // indirect
 	xorm.io/core v0.7.2 // indirect

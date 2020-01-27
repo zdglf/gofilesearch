@@ -12,7 +12,13 @@ const (
 
 	tempaltePath = "../templates/*"
 	assetsPath   = "/assets"
-	assetsDir    = "../assets"
+	assetsDir    = "assets"
+
+	buildPath = "/build"
+	buildDir  = "web/filesearch/dist"
+
+	staticPath = "/static"
+	staticDir  = "web/filesearch/dist/static"
 
 	adminApiPath = "/admin"
 
@@ -32,7 +38,9 @@ func InitRouters() (routers *gin.Engine) {
 	routers.Use(gin.Recovery())
 
 	//routers.LoadHTMLGlob(tempaltePath)
-	routers.Static(assetsDir, assetsPath)
+	routers.Static(assetsPath, assetsDir)
+	routers.Static(buildPath, buildDir)
+	routers.Static(staticPath, staticDir)
 
 	searchEngineApi := routers.Group(searchEngineApiPath)
 	{

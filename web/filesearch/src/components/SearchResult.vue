@@ -6,22 +6,22 @@
           <el-input v-model="input" placeholder="请输入搜索内容" clearable></el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">搜索</el-button>
+          <el-button type="primary" @click.native="clickFileSearch">搜索</el-button>
         </el-col>
       </el-row>
     </el-header>
     <el-main>
-      <div v-if="search_result.length===0">
+      <div v-show="search_result.length===0">
         <el-image :src="not_found_image_url" fit></el-image>
       </div>
-      <div v-else>
+      <div v-show="search_result.length > 0">
         <div  v-for="item in search_result" :key="item.id">
           <el-row :gutter="20">
             <el-col :span="10">
-              <el-button type="text">{{item.title}}</el-button>
+              <el-button type="text">{{item.name}}</el-button>
             </el-col>
             <el-col :span="10">
-              <el-button type="text">{{item.hit}}</el-button>
+              <el-button type="text">{{item.desc}}</el-button>
             </el-col>
           </el-row>
           <el-row :gutter="20">
@@ -37,8 +37,13 @@
       <el-row :gutter="20">
         <el-col :span="20">
           <el-pagination
+            @current-change="handleCurrengChange"
+            @prev-click="handleCurrengChange"
+            @next-click="handleCurrengChange"
             layout="prev, pager, next"
-            :total="1000">
+            :current-page="currentPage"
+            :page-size="pageSize"
+            :total="total">
           </el-pagination>
         </el-col>
       </el-row>
@@ -49,30 +54,67 @@
 <script>
 export default {
   name: 'SearchResult',
+  created: function () {
+    var keyword = this.$route.params.keyword
+    if (keyword !== undefined && keyword !== null) {
+      this.input = keyword
+      this.requestFileSearch()
+    }
+  },
+  methods: {
+    clickFileSearch: function () {
+      if (this.input !== undefined && this.input !== null && this.input !== '') {
+        this.requestFileSearch()
+      }
+    },
+    handleCurrengChange: function (selectedPageNo) {
+      this.pageIndex = selectedPageNo - 1
+      this.requestFileSearch()
+    },
+    requestFileSearch: function () {
+      var self = this
+      this.$http.post('/search/doc', {
+        'keyword': this.input,
+        'pageIndex': this.pageIndex
+      }).then((response) => {
+        if (response.data.code !== 0) {
+          console.log(response)
+          self.$notify({
+            title: '检索失败',
+            message: response.data.msg
+          })
+          return
+        }
+        self.total = response.data.total
+        self.pageSize = response.data.count
+        self.currentPage = self.pageIndex + 1
+        self.search_result = response.data.data
+        console.log('total: ' + self.total)
+      }, (response) => {
+        console.log(response)
+        self.$notify({
+          title: '检索失败',
+          message: 'Server Status:' + response.status
+        })
+      }).catch((e) => {
+        console.log(e)
+        self.$notify({
+          title: '检索失败',
+          message: e
+        })
+      })
+    }
+  },
   data () {
     return {
       input: '',
+      pageIndex: 0,
+      pageSize: 0,
+      total: 0,
+      currentPage: 0,
       not_found_image_url: require('../assets/no_found.png'),
       msg: 'Welcom to Vue App Webpage!',
       search_result: [
-        {
-          id: '1',
-          title: 'name',
-          url: 'http://baidu.com',
-          hit: 'text'
-        },
-        {
-          id: '2',
-          title: 'name',
-          url: 'http://baidu.com',
-          hit: 'text'
-        },
-        {
-          id: '4',
-          title: 'name',
-          url: 'http://baidu.com',
-          hit: 'text'
-        }
       ]
     }
   }

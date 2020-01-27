@@ -9,7 +9,7 @@
           <el-input v-model="input" placeholder="请输入搜索内容"></el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">搜索</el-button>
+          <el-button type="primary" @click.native="clickFileSearchEvent" >搜索</el-button>
         </el-col>
       </el-row>
     </el-main>
@@ -23,6 +23,17 @@ export default {
     return {
       input: '',
       icon_url: require('../assets/logo.png')
+    }
+  },
+  methods: {
+    clickFileSearchEvent: function () {
+      console.log(this.input)
+      this.$router.push({
+        name: 'SearchResult',
+        params: {
+          keyword: this.input
+        }
+      })
     }
   }
 }

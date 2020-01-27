@@ -127,7 +127,7 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
     format:Json
     param: 
     {
-      key: 'keyword',
+      keyword: 'keyword',
       pageIndex: '0'
     }
 

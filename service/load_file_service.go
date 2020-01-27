@@ -56,7 +56,9 @@ func insertToESFromGfile(gfile file_sys.GFile) (err error) {
 	})
 }
 
-func (this *LoadFileService) ResponseApiLoadFile()
+func (this *LoadFileService) ResponseApiLoadFile() {
+
+}
 
 func (this *LoadFileService) LoadFile(fileModel *db_model.FileSpider) {
 	var gfile file_sys.GFile = nil
