@@ -5,10 +5,12 @@ import HomeSearchPage from '@/components/HomeSearchPage'
 import SearchResult from '@/components/SearchResult'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueClipboard from 'vue-clipboard2'
 
 Vue.use(Router)
 Vue.use(ElementUI)
 Vue.use(VueResource)
+Vue.use(VueClipboard)
 
 export default new Router({
   routes: [

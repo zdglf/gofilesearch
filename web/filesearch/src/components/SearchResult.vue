@@ -18,11 +18,13 @@
         <div  v-for="item in search_result" :key="item.id">
           <el-card>
             <div slot="header" class="clearfix">
-              <span>{{item.name}}</span>
-              <el-button style="float: right; padding: 3px 0" type="text">复制地址</el-button>
+              <span style="float: left; padding: 3px 0" >{{item.name}}</span>
+              <el-button style="float: right; padding: 3px 0" type="text" v-clipboard:copy="item.url" v-clipboard:success="onCopySuccess" v-clipboard:error="onCopyError">复制地址</el-button>
             </div>
             <div v-for="hit in item.desc" :key="hit">
+              <div style="float: left; padding: 3px 0" >
               {{hit}}
+              </div>
             </div>
           </el-card>
         </div>
@@ -66,6 +68,20 @@ export default {
       this.pageIndex = selectedPageNo - 1
       this.requestFileSearch()
     },
+    onCopySuccess: function (e) {
+      this.$notify({
+        title: '复制成功',
+        message: e.text,
+        duration: 1500
+      })
+    },
+    onCopyError: function (e) {
+      this.$notify({
+        title: '复制失败',
+        message: '浏览器复制内容失败',
+        duration: 1500
+      })
+    },
     requestFileSearch: function () {
       var self = this
       this.$http.post('/search/doc', {
@@ -76,7 +92,8 @@ export default {
           console.log(response)
           self.$notify({
             title: '检索失败',
-            message: response.data.msg
+            message: response.data.msg,
+            duration: 1500
           })
           return
         }
@@ -89,13 +106,15 @@ export default {
         console.log(response)
         self.$notify({
           title: '检索失败',
-          message: 'Server Status:' + response.status
+          message: 'Server Status:' + response.status,
+          duration: 1500
         })
       }).catch((e) => {
         console.log(e)
         self.$notify({
           title: '检索失败',
-          message: e
+          message: e,
+          duration: 1500
         })
       })
     }

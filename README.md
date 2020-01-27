@@ -152,7 +152,6 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
 
 ### TODO
 3. 定义实现接口
-4. 实现前段查询
 5. 实现后台控制管理
 6. 实现后台管理登录
 7. 实现后台用户管理
