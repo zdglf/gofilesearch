@@ -50,7 +50,7 @@
 
 <script>
 export default {
-  name: 'SearchResult',
+  name: 'SearchResultPage',
   created: function () {
     var keyword = this.$route.params.keyword
     if (keyword !== undefined && keyword !== null) {

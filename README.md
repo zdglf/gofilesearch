@@ -7,7 +7,7 @@
  
 > INDEX: file_search
 
-> Document: doc
+> Document: _doc
 
 |es字段|字段类型|说明|
 |:----:|:----:|:----:|
@@ -83,6 +83,11 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
     {
 
     }
+    response:
+    {
+      code:'',
+      msg:'',
+    }
 
 ##### 执行文件爬虫任务
     url: /admin/task/exec
@@ -90,7 +95,12 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
     format:Json
     param:
     {
-
+      id: "id"
+    }
+    response:
+    {
+      code:'',
+      msg:'',
     }
 ##### 查看文件爬虫任务列表
     url: /admin/task/list
@@ -108,7 +118,12 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
     format:Json
     param:
     {
-
+      id: "id"
+    }
+    response:
+    {
+      code:'',
+      msg:'',
     }
 
 ##### 修改文件爬虫任务

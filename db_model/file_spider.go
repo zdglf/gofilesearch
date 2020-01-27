@@ -1,8 +1,13 @@
 package db_model
 
 import (
+	"errors"
 	"github.com/go-xorm/xorm"
 	"github.com/zdglf/gofilesearch/base_struct"
+)
+
+const (
+	FieldFileSpiderLastRunningTime = "last_running_time"
 )
 
 type FileSpider struct {
@@ -29,12 +34,21 @@ func (this *FileSpider) Insert() (err error) {
 	return
 }
 
-func (this *FileSpider) Update() (err error) {
+func (this *FileSpider) UpdateAll() (err error) {
 	var engine *xorm.Engine
 	if engine, err = initEngine(false); err != nil {
 		return
 	}
-	_, err = engine.Update(this)
+	_, err = engine.ID(this.Id).Update(this)
+	return
+}
+
+func (this *FileSpider) Update(columns ...string) (err error) {
+	var engine *xorm.Engine
+	if engine, err = initEngine(false); err != nil {
+		return
+	}
+	_, err = engine.ID(this.Id).Cols(columns...).Update(this)
 	return
 }
 
@@ -63,5 +77,31 @@ func QueryFileSpiderList(pageIndex int) (dataList []*FileSpider, err error) {
 	}
 	dataList = make([]*FileSpider, 0)
 	err = engine.Limit(envDBPageCount, pageIndex*envDBPageCount).Find(&dataList)
+	return
+}
+
+func GetFileSpiderTotal() (total int, err error) {
+	var engine *xorm.Engine
+	if engine, err = initEngine(false); err != nil {
+		return
+	}
+	var totalCount int64 = 0
+	totalCount, err = engine.Count(&FileSpider{})
+	total = int(totalCount)
+	return
+}
+
+func GetFileSpiderById(id string) (fp *FileSpider, err error) {
+	var engine *xorm.Engine
+	if engine, err = initEngine(false); err != nil {
+		return
+	}
+	var has bool
+	if has, err = engine.ID(id).Get(fp); err != nil {
+		return
+	}
+	if !has {
+		err = errors.New("The Id Not Found")
+	}
 	return
 }

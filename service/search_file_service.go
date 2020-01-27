@@ -13,23 +13,23 @@ type SearchFileService struct {
 }
 
 func (this *SearchFileService) ResponseApiFileSearch() {
-	var searchReq = api_model.SearchRequest{}
+	var searchReq = &api_model.SearchRequest{}
 	var err error
 	searchResp := &api_model.SearchResultResponse{}
 	statusCode := &api_model.StatusCode{}
 	searchResp.StatusCode = statusCode
-	if err = this.Context.ShouldBindJSON(&searchReq); err != nil {
+	if err = this.Context.ShouldBindJSON(searchReq); err != nil {
 		flog.Println(err.Error())
 		statusCode.Code = api_model.CODE_PARAM_ERROR
 		statusCode.Msg = err.Error()
-		this.Context.JSON(http.StatusOK, searchResp)
+		this.Context.JSON(http.StatusOK, statusCode)
 		return
 	}
 	if searchResp.Data, searchResp.Page, err = es_model.SearchDocument(searchReq.Keyword, searchReq.PageIndex); err != nil {
 		flog.Println(err.Error())
 		statusCode.Code = api_model.CODE_ES_ERROR
 		statusCode.Msg = err.Error()
-		this.Context.JSON(http.StatusOK, searchResp)
+		this.Context.JSON(http.StatusOK, statusCode)
 		return
 	}
 	statusCode.Code = api_model.CODE_SUCCESS

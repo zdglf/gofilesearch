@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import VueResource from 'vue-resource'
 import HomeSearchPage from '@/components/HomeSearchPage'
-import SearchResult from '@/components/SearchResult'
+import SearchResultPage from '@/components/SearchResultPage'
+import AdminTaskPage from '@/components/AdminTaskPage'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueClipboard from 'vue-clipboard2'
@@ -21,8 +22,13 @@ export default new Router({
     },
     {
       path: '/search_result',
-      name: 'SearchResult',
-      component: SearchResult
+      name: 'SearchResultPage',
+      component: SearchResultPage
+    },
+    {
+      path: '/admin/task',
+      name: 'AdminTaskPage',
+      component: AdminTaskPage
     }
   ]
 })
