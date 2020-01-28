@@ -78,6 +78,7 @@ func QueryFileSpiderList(pageIndex int) (dataList []*FileSpider, pageInfo *api_m
 		return
 	}
 	dataList = make([]*FileSpider, 0)
+	pageInfo = &api_model.Page{}
 	pageInfo.Count = envDBPageCount
 	pageInfo.Index = pageIndex * envDBPageCount
 	if pageInfo.Total, err = GetFileSpiderTotal(); err != nil {
@@ -94,7 +95,7 @@ func GetFileSpiderTotal() (total int, err error) {
 		return
 	}
 	var totalCount int64 = 0
-	totalCount, err = engine.Count(&FileSpider{})
+	totalCount, err = engine.Count(new(FileSpider))
 	total = int(totalCount)
 	return
 }
@@ -104,6 +105,7 @@ func GetFileSpiderById(id string) (fp *FileSpider, err error) {
 	if engine, err = initEngine(false); err != nil {
 		return
 	}
+	fp = &FileSpider{}
 	var has bool
 	if has, err = engine.ID(id).Get(fp); err != nil {
 		return
