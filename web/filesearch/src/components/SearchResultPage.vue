@@ -91,8 +91,8 @@ export default {
         if (response.data.code !== 0) {
           console.log(response)
           self.$notify({
-            title: '检索失败',
-            message: response.data.msg,
+            title: '提示',
+            message: '检索失败, ' + response.data.msg,
             duration: 1500
           })
           return
@@ -101,19 +101,18 @@ export default {
         self.pageSize = response.data.count
         self.currentPage = self.pageIndex + 1
         self.search_result = response.data.data
-        console.log('total: ' + self.total)
       }, (response) => {
         console.log(response)
         self.$notify({
-          title: '检索失败',
-          message: 'Server Status:' + response.status,
+          title: '提示',
+          message: '检索失败，Server Status:' + response.status,
           duration: 1500
         })
       }).catch((e) => {
         console.log(e)
         self.$notify({
-          title: '检索失败',
-          message: e,
+          title: '提示',
+          message: '检索失败,' + e,
           duration: 1500
         })
       })
