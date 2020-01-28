@@ -2,7 +2,9 @@ package db_model
 
 import (
 	"errors"
+
 	"github.com/go-xorm/xorm"
+	"github.com/zdglf/gofilesearch/api_model"
 	"github.com/zdglf/gofilesearch/base_struct"
 )
 
@@ -70,13 +72,19 @@ func (this *FileSpider) Exist() (found bool, err error) {
 	return
 }
 
-func QueryFileSpiderList(pageIndex int) (dataList []*FileSpider, err error) {
+func QueryFileSpiderList(pageIndex int) (dataList []*FileSpider, pageInfo *api_model.Page, err error) {
 	var engine *xorm.Engine
 	if engine, err = initEngine(false); err != nil {
 		return
 	}
 	dataList = make([]*FileSpider, 0)
-	err = engine.Limit(envDBPageCount, pageIndex*envDBPageCount).Find(&dataList)
+	pageInfo.Count = envDBPageCount
+	pageInfo.Index = pageIndex * envDBPageCount
+	if pageInfo.Total, err = GetFileSpiderTotal(); err != nil {
+		return
+	}
+
+	err = engine.Limit(pageInfo.Count, pageInfo.Index).Find(&dataList)
 	return
 }
 

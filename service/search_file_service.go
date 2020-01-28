@@ -15,7 +15,7 @@ type SearchFileService struct {
 func (this *SearchFileService) ResponseApiFileSearch() {
 	var searchReq = &api_model.SearchRequest{}
 	var err error
-	searchResp := &api_model.SearchResultResponse{}
+	searchResp := &api_model.WithPageDataResponse{}
 	statusCode := &api_model.StatusCode{}
 	searchResp.StatusCode = statusCode
 	if err = this.Context.ShouldBindJSON(searchReq); err != nil {

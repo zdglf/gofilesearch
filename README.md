@@ -81,6 +81,15 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
     format:Json
     param:
     {
+      type:'file',//文件类型目前只支持file
+      folder:'',//文件目录
+      userName:'',
+      password:'',
+      enable:1|0,//是否启动定时(未实现)
+      regular:''//文件匹配正则表达式
+      timing:''//定时启动（未实现）
+      sizeLimit:20*1024*1024//文件大小限制，字节
+      processSize:10//协程处理大小
 
     }
     response:

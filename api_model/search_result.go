@@ -12,9 +12,3 @@ type SearchResult struct {
 	Desc     []string `json:"desc"`     //搜索到的关键字段
 	CreateAt string   `json:"createAt"` //文件导入ES时间
 }
-
-type SearchResultResponse struct {
-	*Page
-	*StatusCode
-	Data []*SearchResult `json:"data"`
-}
