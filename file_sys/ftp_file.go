@@ -1,6 +1,7 @@
 package file_sys
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/url"
@@ -48,6 +49,16 @@ func (this *FtpFile) GetAbFilePath() string {
 	return fmt.Sprintf("ftp://%s%s", this.FtpServer, this.FilePath)
 }
 
+func (this *FtpFile) getParentFolderAndFileName() (folder, fileName string) {
+	lastIndex := strings.LastIndex(this.FilePath, "/")
+	folder = "/"
+	if lastIndex != -1 {
+		folder = this.FilePath[0:lastIndex]
+	}
+	fileName = this.FilePath[lastIndex+1:]
+	return
+}
+
 // 获取文件大小
 func (this *FtpFile) GetFileSize() (fileSize int, err error) {
 	if err = this.initFtpClient(); err != nil {
@@ -58,18 +69,16 @@ func (this *FtpFile) GetFileSize() (fileSize int, err error) {
 	}
 	this.fileSizeMutex.Lock()
 	defer this.fileSizeMutex.Unlock()
-	lastIndex := strings.LastIndex(this.FilePath, "/")
-	folder := "/"
-	if lastIndex != -1 {
-		folder = this.FilePath[0:lastIndex]
-	}
-	name := this.FilePath[lastIndex+1:]
+	folder, name := this.getParentFolderAndFileName()
 
 	if err = this.ftpClient.ChangeDir(folder); err != nil {
 		return
 	}
 	var ftpFileSize int64 = 0
 	if ftpFileSize, err = this.ftpClient.FileSize(name); err != nil {
+		return
+	}
+	if err = this.ftpClient.ChangeDir("/"); err != nil {
 		return
 	}
 	fileSize = int(ftpFileSize)
@@ -130,22 +139,25 @@ func (this *FtpFile) IsDir() (isDir bool, err error) {
 	if err = this.initFtpClient(); err != nil {
 		return
 	}
-	_, err = this.ftpClient.NameList(this.FilePath)
-	//Maybe A file or Error
-	if err != nil {
-		// 读取文件
-		if _, err = this.ftpClient.Retr(this.FilePath); err != nil {
-			return
-		} else {
-			// is File
-			isDir = false
-			return
-		}
-	} else {
-		isDir = true
+
+	folder, name := this.getParentFolderAndFileName()
+	var entries []*ftp.Entry
+	if entries, err = this.ftpClient.List(folder); err != nil {
 		return
 	}
-
+	for _, e := range entries {
+		if e.Name == name {
+			if e.Type == ftp.EntryTypeFile {
+				isDir = false
+				return
+			} else if e.Type == ftp.EntryTypeFolder {
+				isDir = true
+				return
+			}
+		}
+	}
+	err = errors.New("file not found")
+	return
 }
 
 // 列举文件
@@ -153,21 +165,24 @@ func (this *FtpFile) ListFile() (fileList []GFile, err error) {
 	if err = this.initFtpClient(); err != nil {
 		return
 	}
-	var entries []string
-	if entries, err = this.ftpClient.NameList(this.FilePath); err != nil {
+	var entries []*ftp.Entry
+	if entries, err = this.ftpClient.List(this.FilePath); err != nil {
 		return
 	}
+	println("start list folder", this.FilePath)
 	for _, e := range entries {
-		newPath := this.FilePath + "/" + e
+		newPath := this.FilePath + "/" + e.Name
 		if this.FilePath == "/" || this.FilePath == "" {
-			newPath = "/" + e
+			newPath = "/" + e.Name
 		}
+		println("fileName", newPath)
 		fileList = append(fileList, &FtpFile{
 			FilePath:  newPath,
 			FtpServer: this.FtpServer,
 			ftpClient: this.ftpClient,
 		})
 	}
+	println("end list folder", this.FilePath)
 
 	return
 }
