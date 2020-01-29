@@ -96,6 +96,16 @@ func TestFtpFile_GetFileSize(t *testing.T) {
 	println(size)
 }
 
+func TestNewFtpFile(t *testing.T) {
+	ftpFile := NewFtpFile("ftp://192.168.0.102:2121")
+
+	println(ftpFile.GetAbFilePath())
+
+	ftpFile = NewFtpFile("ftp://192.168.0.102/filePath")
+
+	println(ftpFile.GetAbFilePath())
+}
+
 func TestFtpFile_IsDir(t *testing.T) {
 	ftpFile := &FtpFile{FtpServer: ftpServer, FilePath: "/Download/a.pdf"}
 	var verify bool

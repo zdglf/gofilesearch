@@ -60,7 +60,8 @@ func (this *LoadFileService) LoadFile(fileModel *db_model.FileSpider) {
 	switch strings.ToLower(fileModel.Type) {
 	case typeFile:
 		gfile = &file_sys.LocalFile{FilePath: fileModel.Folder}
-
+	case typeFtp:
+		gfile = file_sys.NewFtpFile(fileModel.Folder)
 	}
 	if gfile != nil {
 		var err error

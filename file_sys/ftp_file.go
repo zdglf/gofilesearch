@@ -3,6 +3,7 @@ package file_sys
 import (
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"strings"
 	"sync"
 	"time"
@@ -23,6 +24,23 @@ type FtpFile struct {
 
 	ftpClient     *ftp.ServerConn
 	fileSizeMutex *sync.Mutex
+}
+
+func NewFtpFile(filePath string) (gfile *FtpFile) {
+	var err error
+	var u *url.URL
+	if u, err = url.Parse(filePath); err != nil {
+		return nil
+	}
+	port := u.Port()
+	if port == "" {
+		port = "21"
+	}
+	hostName := u.Hostname()
+	serverName := fmt.Sprintf("%s:%s", hostName, port)
+	leftPath := u.EscapedPath()
+	gfile = &FtpFile{FtpServer: serverName, FilePath: leftPath}
+	return
 }
 
 // 获取文件绝对路径
