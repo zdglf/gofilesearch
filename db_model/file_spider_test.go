@@ -1,6 +1,7 @@
 package db_model
 
 import (
+	"github.com/zdglf/gofilesearch/api_model"
 	"github.com/zdglf/gofilesearch/util/gen_data"
 	"testing"
 )
@@ -47,7 +48,8 @@ func TestInsertFileSpider(t *testing.T) {
 		t.Error("update error")
 	}
 	var list []*FileSpider
-	if list, err = QueryFileSpiderList(0); err != nil {
+	var pageInfo *api_model.Page
+	if list, pageInfo, err = QueryFileSpiderList(0); err != nil {
 		t.Error(err.Error())
 		return
 	}
@@ -55,6 +57,11 @@ func TestInsertFileSpider(t *testing.T) {
 		t.Error("data size error")
 		return
 	}
+	if pageInfo.Count != 1 {
+		t.Error("data size error")
+		return
+	}
+
 	if list[0].Enable != 1 {
 		t.Error("data update error")
 		return
@@ -65,11 +72,16 @@ func TestInsertFileSpider(t *testing.T) {
 		return
 	}
 
-	if list, err = QueryFileSpiderList(0); err != nil {
+	if list, pageInfo, err = QueryFileSpiderList(0); err != nil {
 		t.Error(err.Error())
 		return
 	}
 	if len(list) != 0 {
+		t.Error("data size error")
+		return
+	}
+
+	if pageInfo.Count != 0 {
 		t.Error("data size error")
 		return
 	}

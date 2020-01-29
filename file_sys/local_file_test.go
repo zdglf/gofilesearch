@@ -1,23 +1,23 @@
 package file_sys
 
 import (
-	"os"
-	"testing"
 	"fmt"
+	"os"
 	"path"
-	"sync"
 	"strconv"
+	"sync"
+	"testing"
 )
 
 func TestLocalFile_ListFile(t *testing.T) {
-    dir, _ := os.Getwd()
+	dir, _ := os.Getwd()
 	dir = path.Join(dir, "data")
 	localFile := &LocalFile{dir}
 	if localFileList, err := localFile.ListFile(); err != nil {
 		t.Error(err.Error())
 	} else {
-		if len(localFileList) != 4{
-			t.Error("data folder ListFile must be 4 but not " +strconv.Itoa(len(localFileList)))
+		if len(localFileList) != 4 {
+			t.Error("data folder ListFile must be 4 but not " + strconv.Itoa(len(localFileList)))
 		}
 
 	}
@@ -43,32 +43,32 @@ func TestLocalFile_WalkGFile(t *testing.T) {
 	var count = 0
 	countAddress := &count
 	var lock = &sync.Mutex{}
-	fileProcess := func(f GFile)error{
+	fileProcess := func(f GFile) error {
 		lock.Lock()
-		(*countAddress) ++
+		(*countAddress)++
 		lock.Unlock()
 		fmt.Println(f.GetAbFilePath())
-		if hashValue, content, err := f.GetFileContent();err!=nil{
+		if hashValue, content, err := f.GetFileContent(); err != nil {
 			t.Error(err.Error())
-		}else{
+		} else {
 			println(hashValue)
 			println(content)
 		}
 		return nil
 	}
 	WalkGFile(localFile, 10, "(.*)", 0, fileProcess)
-	if(count!=4){
-		t.Error("data folder file number must be 4 but not "+ strconv.Itoa(count))
+	if count != 4 {
+		t.Error("data folder file number must be 4 but not " + strconv.Itoa(count))
 	}
 }
 
 func BenchmarkLocalFile_WalkGFile(b *testing.B) {
 
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		dir, _ := os.Getwd()
 		dir = path.Join(dir, "data")
 		localFile := &LocalFile{dir}
-		fileProcess := func(f GFile)error{
+		fileProcess := func(f GFile) error {
 			return nil
 		}
 		WalkGFile(localFile, 10, "(.*)", 0, fileProcess)

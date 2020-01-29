@@ -9,6 +9,7 @@ require (
 	github.com/go-xorm/xorm v0.7.9
 	github.com/gogs/chardet v0.0.0-20191104214054-4b6791f73a28
 	github.com/google/uuid v1.1.1
+	github.com/jlaffaye/ftp v0.0.0-20191218041957-e1b8fdd0dcc3
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/ledongthuc/pdf v0.0.0-20190830105003-8ac343ec9fdd
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
