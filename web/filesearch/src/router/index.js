@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import VueResource from 'vue-resource'
 import HomeSearchPage from '@/components/HomeSearchPage'
 import SearchResultPage from '@/components/SearchResultPage'
-import AdminTaskPage from '@/components/AdminTaskPage'
+import AdminPage from '@/components/AdminPage'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueClipboard from 'vue-clipboard2'
@@ -26,9 +26,9 @@ export default new Router({
       component: SearchResultPage
     },
     {
-      path: '/admin/task',
-      name: 'AdminTaskPage',
-      component: AdminTaskPage
+      path: '/admin',
+      name: 'AdminPage',
+      component: AdminPage
     }
   ]
 })
