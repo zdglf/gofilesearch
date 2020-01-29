@@ -7,18 +7,13 @@ import (
 	"testing"
 )
 
-const (
-	ftpServer   = "192.168.0.102:2121"
-	ftpFilePath = ""
-)
-
 func TestFtpFile_GetAbFilePath(t *testing.T) {
-	ftpFile := &FtpFile{FtpServer: ftpServer, FilePath: ftpFilePath}
+	ftpFile := NewFtpFile("ftp://192.168.0.102:2121/")
 	println(ftpFile.GetAbFilePath())
 }
 
 func TestFtpFile_ListFile(t *testing.T) {
-	ftpFile := &FtpFile{FtpServer: ftpServer, FilePath: ftpFilePath}
+	ftpFile := NewFtpFile("ftp://192.168.0.102:2121/")
 	var verify bool
 	var err error
 	if verify, err = ftpFile.Verify("guest", "guest"); err != nil {
@@ -41,7 +36,7 @@ func TestFtpFile_ListFile(t *testing.T) {
 }
 
 func TestFtpFile_GetFileContent(t *testing.T) {
-	ftpFile := &FtpFile{FtpServer: ftpServer, FilePath: "/Download/a.pdf"}
+	ftpFile := NewFtpFile("ftp://192.168.0.102:2121/Download/a.pdf")
 	var verify bool
 	var err error
 	if verify, err = ftpFile.Verify("guest", "guest"); err != nil {
@@ -62,7 +57,7 @@ func TestFtpFile_GetFileContent(t *testing.T) {
 }
 
 func TestFtpFile_GetFileName(t *testing.T) {
-	ftpFile := &FtpFile{FtpServer: ftpServer, FilePath: "/Download/a.pdf"}
+	ftpFile := NewFtpFile("ftp://192.168.0.102:2121/Download/a.pdf")
 	var verify bool
 	var err error
 	if verify, err = ftpFile.Verify("guest", "guest"); err != nil {
@@ -81,7 +76,7 @@ func TestFtpFile_GetFileName(t *testing.T) {
 }
 
 func TestFtpFile_GetFileSize(t *testing.T) {
-	ftpFile := &FtpFile{FtpServer: ftpServer, FilePath: "/Download/a.pdf"}
+	ftpFile := NewFtpFile("ftp://192.168.0.102:2121/Download/a.pdf")
 	var verify bool
 	var err error
 	if verify, err = ftpFile.Verify("guest", "guest"); err != nil {
@@ -110,7 +105,7 @@ func TestNewFtpFile(t *testing.T) {
 }
 
 func TestFtpFile_IsDir(t *testing.T) {
-	ftpFile := &FtpFile{FtpServer: ftpServer, FilePath: "/Download/a.pdf"}
+	ftpFile := NewFtpFile("ftp://ftp.yxftp.com/影像电子书")
 	var verify bool
 	var err error
 	if verify, err = ftpFile.Verify("guest", "guest"); err != nil {

@@ -23,6 +23,9 @@ type FtpFile struct {
 	FtpServer string
 	FilePath  string
 
+	userName string
+	password string
+
 	ftpClient     *ftp.ServerConn
 	fileSizeMutex *sync.Mutex
 }
@@ -89,14 +92,19 @@ func (this *FtpFile) initFtpClient() (err error) {
 	if this.ftpClient != nil {
 		return
 	}
-	this.ftpClient, err = ftp.Dial(this.FtpServer, ftp.DialWithTimeout(ftpTimeOutSecond*time.Second))
+	if this.ftpClient, err = ftp.Dial(this.FtpServer, ftp.DialWithTimeout(ftpTimeOutSecond*time.Second)); err != nil {
+		return
+	}
+	if this.userName == "" || this.password == "" {
+		return
+	}
+	err = this.ftpClient.Login(this.userName, this.password)
 	return
 }
 
 //获取文件名
 func (this *FtpFile) GetFileName() (fileName string, err error) {
-	pathSplit := strings.Split(this.FilePath, "/")
-	fileName = pathSplit[len(pathSplit)-1]
+	_, fileName = this.getParentFolderAndFileName()
 	return
 }
 
@@ -105,7 +113,9 @@ func (this *FtpFile) Verify(username, password string) (isVerify bool, err error
 	if err = this.initFtpClient(); err != nil {
 		return
 	}
-	if username == "" && password == "" {
+	this.userName = username
+	this.password = password
+	if username == "" || password == "" {
 		isVerify = true
 		return
 	}
@@ -169,17 +179,16 @@ func (this *FtpFile) ListFile() (fileList []GFile, err error) {
 	if entries, err = this.ftpClient.List(this.FilePath); err != nil {
 		return
 	}
-	println("start list folder", this.FilePath)
 	for _, e := range entries {
 		newPath := this.FilePath + "/" + e.Name
 		if this.FilePath == "/" || this.FilePath == "" {
 			newPath = "/" + e.Name
 		}
-		println("fileName", newPath)
 		fileList = append(fileList, &FtpFile{
 			FilePath:  newPath,
 			FtpServer: this.FtpServer,
-			ftpClient: this.ftpClient,
+			password:  this.password,
+			userName:  this.userName,
 		})
 	}
 	println("end list folder", this.FilePath)
