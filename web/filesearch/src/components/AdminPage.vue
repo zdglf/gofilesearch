@@ -65,9 +65,9 @@
         @prev-click="handleCurrengChange"
         @next-click="handleCurrengChange"
         layout="prev, pager, next"
-        :current-page="currentPage"
-        :page-size="pageSize"
-        :total="total">
+        :current-page="taskCurrentPage"
+        :page-size="taskPageSize"
+        :total="taskTotal">
       </el-pagination>
     </el-tab-pane>
     <el-tab-pane label="用户管理">
@@ -84,10 +84,10 @@ export default {
   data () {
     return {
       taskDataList: [],
-      pageIndex: 0,
-      currentPage: 0,
-      total: 0,
-      pageSize: 0
+      taskPageIndex: 0,
+      taskCurrentPage: 0,
+      taskTotal: 0,
+      taskPageSize: 0
     }
   },
   created: function () {
@@ -103,13 +103,13 @@ export default {
       this.requestTaskExec(data[index].id)
     },
     handleCurrengChange: function (selectedPageNo) {
-      this.pageIndex = selectedPageNo - 1
+      this.taskPageIndex = selectedPageNo - 1
       this.requestTaskList()
     },
     requestTaskList: function () {
       var self = this
       this.$http.post('/admin/task/list', {
-        'pageIndex': this.pageIndex
+        'pageIndex': this.taskPageIndex
       }).then((response) => {
         if (response.data.code !== 0) {
           console.log(response)
@@ -121,9 +121,9 @@ export default {
           return
         }
         self.taskDataList = response.data.data
-        self.total = response.data.total
-        self.pageSize = response.data.count
-        self.currentPage = self.pageIndex + 1
+        self.taskTotal = response.data.total
+        self.taskPageSize = response.data.count
+        self.taskCurrentPage = self.taskPageIndex + 1
       }, (response) => {
         console.log(response)
         self.$notify({
@@ -194,7 +194,7 @@ export default {
           message: '删除任务成功',
           duration: 1500
         })
-        self.pageIndex = 0
+        self.taskPageIndex = 0
         self.requestTaskList()
       }, (response) => {
         console.log(response)

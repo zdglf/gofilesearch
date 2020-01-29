@@ -29,7 +29,7 @@ export default {
     clickFileSearchEvent: function () {
       console.log(this.input)
       this.$router.push({
-        name: 'SearchResult',
+        name: 'SearchResultPage',
         params: {
           keyword: this.input
         }
