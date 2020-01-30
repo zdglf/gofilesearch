@@ -1,6 +1,10 @@
 ### 文件搜索
 
-#### 
+
+
+#### 简介
+
+平时接触的文档较多，找起来也不是方便，有时想不起来。决定结合ES和Gin，搞个文档搜索。方便自己查找文档。
 
 
 #### ES设计
@@ -44,12 +48,6 @@
 
 > sudo docker run -p 3306:3306 -v /Users/zhangmike/Documents/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
 
-##### db_model 测试
-
-```
-//需要添加环境变量
-MYSQL_USER=root MYSQL_PASSWORD=123456 MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DBNAME=test go test -timeout 30s github.com/zdglf/gofilesearch/db_model -run ^TestInsertFileSpider$ -v
-```
 
 #### es7.x 启动
 
@@ -71,7 +69,30 @@ docker commit [容器Id] elasticsearch-ik-pinyin:7.4.2
 curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X PUT --data '{"settings":{"index.analysis.analyzer.default.type":"ik_max_word"},"mappings":{"properties":{"url":{"type":"text","analyzer":"ik_max_word"},"content":{"type":"text","analyzer":"ik_max_word"},"file_name":{"type":"text","analyzer":"ik_max_word"}}}}' 
 ```
 
+#### vue 
 
+##### 安装
+
+```
+cd web/filesearch
+//还需要elementui
+npm install
+npm run build
+```
+
+#### 运行
+
+```
+MYSQL_USER=root MYSQL_PASSWORD=123456 MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL_DBNAME=file_search go run main.go
+
+//浏览器打开
+//添加任务
+http://localhost:8090/build/#/admin
+//搜索
+http://localhost:8090/build/#/
+```
+
+**文件目录修改，文档sha256值不变，不会重新提交ES,建议重新清除ES Index**
 
 #### 接口
 
@@ -81,7 +102,7 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
     format:Json
     param:
     {
-      type:'file',//文件类型目前只支持file
+      type:'file',//文件类型目前只支持file,ftp
       folder:'',//文件目录
       userName:'',
       password:'',
@@ -158,16 +179,6 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
       msg:'',
     }
 
-##### 修改文件爬虫任务
-
-    url:/admin/task/modify
-    method:Post
-    format:Json
-    param:
-    {
-      
-    }
-
 ##### 搜索接口
     url:/search/doc
     method:Post 
@@ -198,10 +209,9 @@ curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X
     }
 
 ### TODO
-3. 定义实现接口
-5. 实现后台控制管理
-6. 实现后台管理登录
-7. 实现后台用户管理
-8. 支持pptx,ppt,XLS，doc
-9. 支持SVN,FTP,WINODWS共享文件
-10. 过滤HTML标签，关键字高亮
+1. 实现后台控制管理
+2. 实现后台管理登录
+3. 实现后台用户管理
+4. 支持pptx,ppt,XLS，doc
+5. 支持SVN,WINODWS共享文件
+6. 过滤HTML标签，关键字高亮

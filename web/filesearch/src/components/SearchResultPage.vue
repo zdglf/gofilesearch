@@ -3,7 +3,9 @@
     <el-header>
       <el-row :gutter="20">
         <el-col :span="16">
-          <el-input v-model="input" placeholder="请输入搜索内容" clearable @keyup.native.enter="clickFileSearch" ></el-input>
+          <el-input v-model="input" placeholder="请输入搜索内容"  clearable @keyup.native.enter="clickFileSearch" >
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          </el-input>
         </el-col>
         <el-col :span="4">
           <el-button type="primary" @click="clickFileSearch">搜索</el-button>

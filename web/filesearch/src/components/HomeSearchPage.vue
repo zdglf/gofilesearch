@@ -6,7 +6,9 @@
       </el-image>
       <el-row :gutter="20">
         <el-col :span="18">
-          <el-input v-model="input"  @keyup.native.enter="clickFileSearchEvent" placeholder="请输入搜索内容"></el-input>
+          <el-input v-model="input"  @keyup.native.enter="clickFileSearchEvent" placeholder="请输入搜索内容">
+            <i slot="prefix" class="el-input__icon el-icon-search"></i>
+          </el-input>
         </el-col>
         <el-col :span="4">
           <el-button type="primary" @click="clickFileSearchEvent">搜索</el-button>
