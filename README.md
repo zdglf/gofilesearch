@@ -4,7 +4,9 @@
 
 #### 简介
 
-平时接触的文档较多，找起来也不是方便，有时想不起来。决定结合ES和Gin，搞个文档搜索。方便自己查找文档。
+平时接触的文档较多，找起来也不是方便，有时想不起来。决定结合ES,Gin，Vue，搞个文档搜索。方便自己查找文档。
+目前支持的文件格式为，docx,pdf,txt,md. 
+文件存储方式，file(本地)，ftp。
 
 
 #### ES设计
@@ -17,7 +19,7 @@
 |:----:|:----:|:----:|
 |id        |text   | 文件sha256值 [记录唯一值] |
 |content   |text   | 文件内容 [加入中文搜索]    |
-|url       |text   | 文件URI                 |
+|url       |text   | 文件URI[加入中文搜索]    |
 |click_count|int    | 搜索内容点击次数         | 
 |create_at  |date   | 记录创建时间            |
 |file_name  |text   | 文件名                 |
@@ -37,9 +39,9 @@
 |username |varchar(64)  | 用户名|
 |password |varchar(64)  | 密码|
 |create_at |date   | 记录创建时间|
-|enable   |int    | 是否启用|
+|enable   |int    | 是否启用 (未实现)|
 |regular  |text   | 文件名匹配正则表达式|
-|timing   |int    | 启用后间隔天数执行  |
+|timing   |int    | 启用后间隔天数执行(未实现)  |
 |last_running_time|date    | 上次执行时间|
 |size_limit|int    | 文件大小限制 |
 |process_size|int|同时处理的协程|
@@ -109,7 +111,7 @@ http://localhost:8090/build/#/
       enable:1|0,//是否启动定时(未实现)
       regular:''//文件匹配正则表达式
       timing:''//定时启动（未实现）
-      sizeLimit:20*1024*1024//文件大小限制，字节
+      sizeLimit:1024//文件大小限制，字节
       processSize:10//协程处理大小
 
     }
@@ -158,7 +160,7 @@ http://localhost:8090/build/#/
         createAt:'',
         lastRunningTime: '',
         timing:''//定时启动（未实现）
-        sizeLimit:20*1024*1024//文件大小限制，字节
+        sizeLimit:1024//文件大小限制，字节
         processSize:10//协程处理大小
 
       }]
@@ -215,3 +217,4 @@ http://localhost:8090/build/#/
 4. 支持pptx,ppt,XLS，doc
 5. 支持SVN,WINODWS共享文件
 6. 过滤HTML标签，关键字高亮
+7. 定时任务
