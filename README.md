@@ -110,7 +110,7 @@ http://localhost:8090/build/#/
       password:'',
       enable:1|0,//是否启动定时(未实现)
       regular:''//文件匹配正则表达式
-      timing:''//定时启动（未实现）
+      timing:1//定时启动（未实现）
       sizeLimit:1024//文件大小限制，字节
       processSize:10//协程处理大小
 
@@ -210,11 +210,10 @@ http://localhost:8090/build/#/
       ]
     }
 
-### TODO
-1. 实现后台控制管理
-2. 实现后台管理登录
-3. 实现后台用户管理
-4. 支持pptx,ppt,XLS，doc
-5. 支持SVN,WINODWS共享文件
-6. 过滤HTML标签，关键字高亮
-7. 定时任务
+### TODO (未实现)
+1. 后台控制管理
+2. 后台管理登录
+3. 后台用户管理
+4. SVN,WINODWS共享文件
+5. 过滤HTML标签，关键字高亮
+6. 定时任务

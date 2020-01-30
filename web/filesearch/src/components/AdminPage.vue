@@ -1,6 +1,39 @@
 <template>
   <el-tabs type="border-card">
     <el-tab-pane label="任务管理">
+      <el-button type="text" @click="taskDialogVisable = true">创建任务</el-button>
+      <el-dialog title="创建任务" :visible.sync="taskDialogVisable">
+        <el-form :model="taskCreateForm">
+          <el-form-item label="类型" :label-width="taskCreateFormWidth">
+            <el-radio-group v-model="taskCreateForm.type">
+              <el-radio label="file" name="type"></el-radio>
+              <el-radio label="ftp" name="type"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="目录" :label-width="taskCreateFormWidth">
+            <el-input v-model="taskCreateForm.folder" autocomplete="off" ></el-input>
+          </el-form-item>
+          <el-form-item label="用户名" :label-width="taskCreateFormWidth">
+            <el-input v-model="taskCreateForm.userName" autocomplete="off" ></el-input>
+          </el-form-item>
+          <el-form-item label="密码" :label-width="taskCreateFormWidth">
+            <el-input v-model="taskCreateForm.password" autocomplete="off" ></el-input>
+          </el-form-item>
+          <el-form-item label="正则表达" :label-width="taskCreateFormWidth">
+            <el-input v-model="taskCreateForm.regular" autocomplete="off" ></el-input>
+          </el-form-item>
+          <el-form-item label="大小限制" :label-width="taskCreateFormWidth">
+            <el-input v-model="taskCreateForm.sizeLimit" autocomplete="off" ></el-input>
+          </el-form-item>
+          <el-form-item label="协程数限制" :label-width="taskCreateFormWidth">
+            <el-input v-model="taskCreateForm.processSize" autocomplete="off" ></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="taskDialogVisable = false">取 消</el-button>
+          <el-button type="primary" @click="requestTaskCreate">确 定</el-button>
+        </div>
+      </el-dialog>
       <el-table
         :data="taskDataList"
         style="width: 100%"
@@ -83,11 +116,24 @@ export default {
   name: 'AdminPage',
   data () {
     return {
+      taskDialogVisable: false,
       taskDataList: [],
       taskPageIndex: 0,
       taskCurrentPage: 0,
       taskTotal: 0,
-      taskPageSize: 0
+      taskPageSize: 0,
+      taskCreateFormWidth: '120px',
+      taskCreateForm: {
+        type: 'file',
+        folder: '',
+        userName: '',
+        password: '',
+        enable: 0,
+        regular: '\\.(docx|pdf|txt|md)$',
+        timing: 0,
+        sizeLimit: 20 * 1024 * 1024,
+        processSize: 20
+      }
     }
   },
   created: function () {
@@ -105,6 +151,41 @@ export default {
     handleCurrengChange: function (selectedPageNo) {
       this.taskPageIndex = selectedPageNo - 1
       this.requestTaskList()
+    },
+    requestTaskCreate: function () {
+      var self = this
+      this.$http.post('/admin/task/create', this.taskCreateForm)
+        .then((response) => {
+          if (response.data.code !== 0) {
+            console.log(response)
+            self.$notify({
+              title: '提示',
+              message: '创建任务失败,' + response.data.msg,
+              duration: 1500
+            })
+            return
+          }
+          this.taskDialogVisable = false
+          self.$notify({
+            title: '提示',
+            message: '创建任务成功',
+            duration: 1500
+          })
+        }, (response) => {
+          console.log(response)
+          self.$notify({
+            title: '提示',
+            message: '创建任务失败, Server Status:' + response.status,
+            duration: 1500
+          })
+        }).catch((e) => {
+          console.log(e)
+          self.$notify({
+            title: '提示',
+            message: '创建任务失败,' + e,
+            duration: 1500
+          })
+        })
     },
     requestTaskList: function () {
       var self = this
