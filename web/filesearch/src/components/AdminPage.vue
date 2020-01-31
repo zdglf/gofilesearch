@@ -23,10 +23,10 @@
             <el-input v-model="taskCreateForm.regular" autocomplete="off" ></el-input>
           </el-form-item>
           <el-form-item label="大小限制" :label-width="taskCreateFormWidth">
-            <el-input v-model="taskCreateForm.sizeLimit" autocomplete="off" ></el-input>
+            <el-input-number v-model="taskCreateForm.sizeLimit" autocomplete="off" ></el-input-number>
           </el-form-item>
           <el-form-item label="协程数限制" :label-width="taskCreateFormWidth">
-            <el-input v-model="taskCreateForm.processSize" autocomplete="off" ></el-input>
+            <el-input-number v-model="taskCreateForm.processSize" autocomplete="off" :max="50" :min="1"></el-input-number>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
