@@ -5,7 +5,9 @@
 #### 简介
 
 平时接触的文档较多，找起来也不是方便，有时想不起来。决定结合ES,Gin，Vue，搞个文档搜索。方便自己查找文档。
+
 目前支持的文件格式为，docx,pdf,txt,md. 
+
 文件存储方式，file(本地)，ftp。
 
 
@@ -34,7 +36,7 @@
 |字段|字段类型|说明|
 |:----:|:----:|:----:|
 |id       |varchar(32)  | uuid|
-|type     |varchar(32)  | 文件类型,ftp,file,svn,nfs,等|
+|type     |varchar(32)  | 文件类型,ftp,file|
 |folder   |text         | 爬虫目录|
 |username |varchar(64)  | 用户名|
 |password |varchar(64)  | 密码|
@@ -211,8 +213,9 @@ http://localhost:8090/build/#/
     }
 
 ### TODO (未实现)
-1. 后台控制管理
+1. 后台日志管理
 2. 后台管理登录
 3. 后台用户管理
 4. SVN,WINODWS共享文件
 5. 定时任务
+6. 支持更多文档格式
