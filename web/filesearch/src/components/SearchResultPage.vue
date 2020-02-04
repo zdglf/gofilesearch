@@ -14,7 +14,8 @@
     </el-header>
     <el-main>
       <div v-show="search_result.length===0">
-        <el-image :src="not_found_image_url" fit></el-image>
+        <!--<el-image :src="not_found_image_url" fit></el-image>-->
+        <div>未找到内容</div>
       </div>
       <div v-show="search_result.length > 0">
         <div  v-for="item in search_result" :key="item.id">
