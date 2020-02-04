@@ -24,7 +24,7 @@
               <el-button style="float: right; padding: 3px 0" type="text" v-clipboard:copy="item.url" v-clipboard:success="onCopySuccess" v-clipboard:error="onCopyError">复制地址</el-button>
             </div>
             <div v-for="hit in item.desc" :key="hit">
-              <div style="float: left; padding: 3px 0" >
+              <div v-html="hit" style="float: left; padding: 3px 0" >
               {{hit}}
               </div>
             </div>

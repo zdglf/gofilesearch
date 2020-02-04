@@ -68,7 +68,7 @@ docker commit [容器Id] elasticsearch-ik-pinyin:7.4.2
 ##### 初始化es7.x mapping
 
 ```
-curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X PUT --data '{"settings":{"index.analysis.analyzer.default.type":"ik_max_word"},"mappings":{"properties":{"url":{"type":"text","analyzer":"ik_max_word"},"content":{"type":"text","analyzer":"ik_max_word"},"file_name":{"type":"text","analyzer":"ik_max_word"}}}}' 
+curl 'http://localhost:9200/file_search'  -H "Content-Type: application/json" -X PUT --data '{"settings":{"analysis":{"analyzer":{"ik_max_word_without_html":{"tokenizer":"ik_max_word","char_filter":["html_strip"]}}}},"mappings":{"properties":{"url":{"type":"text","analyzer":"ik_max_word_without_html"},"content":{"type":"text","analyzer":"ik_max_word_without_html"},"file_name":{"type":"text","index":false},"id":{"type":"text","index":false},"click_count":{"type":"integer"},"create_at":{"type":"date","format":"yyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis"}}}}' 
 ```
 
 #### vue 
@@ -215,5 +215,4 @@ http://localhost:8090/build/#/
 2. 后台管理登录
 3. 后台用户管理
 4. SVN,WINODWS共享文件
-5. 过滤HTML标签，关键字高亮
-6. 定时任务
+5. 定时任务

@@ -114,8 +114,8 @@ func SearchDocument(keyword string, pageIndex int) (searchResultArray []*api_mod
 			},
 		},
 		"highlight": map[string]interface{}{
-			// "pre_tags":  []string{"<strong>"},
-			// "post_tags": []string{"</strong>"},
+			"pre_tags":  []string{"<span style=\"color:red\">"},
+			"post_tags": []string{"</span>"},
 			"fields": map[string]interface{}{
 				esSearchUrl:     map[string]interface{}{},
 				esSearchContent: map[string]interface{}{},
