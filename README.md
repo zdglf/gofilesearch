@@ -51,6 +51,7 @@
 #### mysql 启动
 
 > sudo docker run -p 3306:3306 -v /Users/zhangmike/Documents/data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
+
 > create database file_search charset=utf8;
 
 
