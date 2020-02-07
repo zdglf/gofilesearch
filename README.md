@@ -93,9 +93,9 @@ MYSQL_USER=root MYSQL_PASSWORD=123456 MYSQL_HOST=localhost MYSQL_PORT=3306 MYSQL
 
 //浏览器打开
 //添加任务
-http://localhost:8090/build/#/admin
+http://localhost:8090/web/#/admin
 //搜索
-http://localhost:8090/build/#/
+http://localhost:8090/web/#/
 ```
 
 **文件目录修改，文档sha256值不变，不会重新提交ES,建议重新清除ES Index**
