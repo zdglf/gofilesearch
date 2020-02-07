@@ -1,8 +1,6 @@
 package main
 
 import (
-	_ "net/http/pprof"
-
 	"github.com/zdglf/gofilesearch/routers"
 )
 
