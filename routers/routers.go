@@ -2,6 +2,7 @@ package routers
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/zdglf/gofilesearch/routers/api"
 )
@@ -14,11 +15,8 @@ const (
 	assetsPath   = "/assets"
 	assetsDir    = "assets"
 
-	buildPath = "/build"
+	buildPath = "/web"
 	buildDir  = "web/filesearch/dist"
-
-	staticPath = "/static"
-	staticDir  = "web/filesearch/dist/static"
 
 	adminApiPath = "/admin"
 
@@ -40,7 +38,6 @@ func InitRouters() (routers *gin.Engine) {
 	//routers.LoadHTMLGlob(tempaltePath)
 	routers.Static(assetsPath, assetsDir)
 	routers.Static(buildPath, buildDir)
-	routers.Static(staticPath, staticDir)
 
 	searchEngineApi := routers.Group(searchEngineApiPath)
 	{

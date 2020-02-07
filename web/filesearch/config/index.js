@@ -9,8 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    proxyTable: {},
+    assetsPublicPath: '/web/',
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -40,7 +39,24 @@ module.exports = {
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
 
-    cssSourceMap: true
+    cssSourceMap: true,
+
+    proxyTable:{
+      '/search/doc':{
+        target:'http://localhost:8090',  
+        changeOrigin:true,
+        pathRewrite:{
+            '^/search/doc':'/search/doc'
+        }
+      },
+      '/admin/task':{
+        target:'http://localhost:8090',  
+        changeOrigin:true,
+        pathRewrite:{
+            '^/admin/task':'/admin/task'
+        }
+      }
+    }
   },
 
   build: {
@@ -50,7 +66,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/web/',
 
     /**
      * Source Maps
