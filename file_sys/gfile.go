@@ -2,12 +2,14 @@ package file_sys
 
 import (
 	"bytes"
-	"github.com/ledongthuc/pdf"
-	"github.com/zdglf/gofilesearch/util/textdecoder"
 	"log"
 	"path"
 	"regexp"
 	"strings"
+
+	"github.com/ledongthuc/pdf"
+	"github.com/zdglf/gofilesearch/util/pool"
+	"github.com/zdglf/gofilesearch/util/textdecoder"
 )
 
 const (
@@ -90,11 +92,8 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 	if chanSize <= 0 {
 		chanSize = 1
 	}
-	chanList := make(chan int, chanSize)
-	buffList := make(chan int, chanSize)
 
-	defer close(chanList)
-	defer close(buffList)
+	threadPool := pool.NewPool(chanSize)
 
 	for len(dirList) != 0 {
 		item := dirList[0]
@@ -121,26 +120,14 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 						if isOverSizeLimit(sizeLimit, itemChild) {
 							continue
 						}
-
-					wait_loop:
-						for {
-							//文件处理协程大于或等于，等待输出
-							if len(buffList) >= cap(buffList) {
-								<-buffList
-								<-chanList
-							} else {
-								//继续创建协程，处理文件
-								buffList <- 0
-								go func(c chan int, f GFile, fp func(f GFile) error) {
-									if err := fp(f); err != nil {
-										log.Println(err.Error())
-									}
-
-									c <- 0
-								}(chanList, itemChild, fileProcess)
-								break wait_loop
+						//继续创建协程，处理文件
+						threadPool.Add(1)
+						go func(f GFile, fp func(f GFile) error) {
+							defer threadPool.Done()
+							if err := fp(f); err != nil {
+								log.Println(err.Error())
 							}
-						}
+						}(itemChild, fileProcess)
 
 					}
 				}
@@ -148,12 +135,7 @@ func WalkGFile(file GFile, chanSize int, re string, sizeLimit int, fileProcess f
 		}
 	}
 	//等待处理完剩余协程
-	bufSize := len(buffList)
-	for i := 0; i < bufSize; i++ {
-		<-buffList
-		<-chanList
-	}
-
+	threadPool.Wait()
 }
 
 // 解析文件内容
